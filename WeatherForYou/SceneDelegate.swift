@@ -28,7 +28,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         tabBarVC.setViewControllers([vc1, vc2, vc3], animated: false)
         tabBarVC.modalPresentationStyle = .fullScreen
-
+        tabBarVC.selectedIndex = 1
+        
         window?.rootViewController = tabBarVC
         window?.makeKeyAndVisible()
     }
