@@ -24,12 +24,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         vc1.title = "Yesterday"
         vc2.title = "Today"
-        vc3.title = "ThisWeek"
+        vc3.title = "This Week"
 
         tabBarVC.setViewControllers([vc1, vc2, vc3], animated: false)
         tabBarVC.modalPresentationStyle = .fullScreen
         tabBarVC.selectedIndex = 1
-        
+
+        let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)]
+        let colorAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.foregroundColor: UIColor.white]
+
+        guard let items = tabBarVC.tabBar.items else { return }
+        items[0].setTitleTextAttributes(attributes, for: .normal)
+        items[0].setTitleTextAttributes(colorAttributes, for: .selected)
+        items[1].setTitleTextAttributes(attributes, for: .normal)
+        items[1].setTitleTextAttributes(colorAttributes, for: .selected)
+        items[2].setTitleTextAttributes(attributes, for: .normal)
+        items[2].setTitleTextAttributes(colorAttributes, for: .selected)
+
         window?.rootViewController = tabBarVC
         window?.makeKeyAndVisible()
     }

@@ -12,6 +12,7 @@ class TodayViewController: UIViewController {
         let label = UILabel()
         label.text = "2023년 11월 1일 수요일"
         label.font = UIFont.systemFont(ofSize: 18)
+        label.textColor = .white
         return label
     }()
 
@@ -19,6 +20,7 @@ class TodayViewController: UIViewController {
         let label = UILabel()
         label.text = "서울 관악구"
         label.font = UIFont.systemFont(ofSize: 30)
+        label.textColor = .white
         return label
     }()
 
@@ -26,6 +28,7 @@ class TodayViewController: UIViewController {
         let label = UILabel()
         label.text = "맑고 구름 조금"
         label.font = UIFont.systemFont(ofSize: 20)
+        label.textColor = .white
         return label
     }()
 
@@ -39,6 +42,7 @@ class TodayViewController: UIViewController {
         let label = UILabel()
         label.text = "18도"
         label.font = UIFont.systemFont(ofSize: 40)
+        label.textColor = .white
         return label
     }()
 
