@@ -1,0 +1,64 @@
+//
+//  HourlyWeatherCollectionViewCell.swift
+//  WeatherForYou
+//
+//  Created by Bora Yang on 11/1/23.
+//
+
+import UIKit
+
+final class HourlyWeatherCollectionViewCell: UICollectionViewCell {
+    static let identifier = "HourlyWeatherCollectionViewCell"
+
+    let timeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "10:00"
+        label.font = UIFont.systemFont(ofSize: 10)
+        return label
+    }()
+
+    let weatherImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "think3.001")
+        return imageView
+    }()
+
+    let temperatureLabel: UILabel = {
+        let label = UILabel()
+        label.text = "18도"
+        label.font = UIFont.systemFont(ofSize: 10)
+        return label
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func setupLayout() {
+        contentView.addSubview(timeLabel)
+        contentView.addSubview(weatherImageView)
+        contentView.addSubview(temperatureLabel)
+
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        weatherImageView.translatesAutoresizingMaskIntoConstraints = false
+        temperatureLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            timeLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            timeLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+
+            weatherImageView.widthAnchor.constraint(equalToConstant: 50),
+            weatherImageView.heightAnchor.constraint(equalToConstant: 50),
+            weatherImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            weatherImageView.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 5),
+
+            temperatureLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            temperatureLabel.topAnchor.constraint(equalTo: weatherImageView.bottomAnchor, constant: 5)
+        ])
+    }
+}
