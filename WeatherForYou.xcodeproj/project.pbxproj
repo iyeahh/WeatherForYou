@@ -18,6 +18,7 @@
 		76DC7D6B2AF2352600F566B8 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DC7D6A2AF2352600F566B8 /* NetworkManager.swift */; };
 		76DC7D702AF24A3900F566B8 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DC7D6F2AF24A3900F566B8 /* Weather.swift */; };
 		76DC7D722AF24E6E00F566B8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DC7D712AF24E6E00F566B8 /* Constants.swift */; };
+		76DC7D792AF3299700F566B8 /* TodayWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DC7D782AF3299700F566B8 /* TodayWeather.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		76DC7D6F2AF24A3900F566B8 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		76DC7D712AF24E6E00F566B8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		76DC7D772AF31DAA00F566B8 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		76DC7D782AF3299700F566B8 /* TodayWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayWeather.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -110,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				76DC7D6F2AF24A3900F566B8 /* Weather.swift */,
+				76DC7D782AF3299700F566B8 /* TodayWeather.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -193,6 +196,7 @@
 				76DC7D6B2AF2352600F566B8 /* NetworkManager.swift in Sources */,
 				76DC7D652AF2282900F566B8 /* ThisWeekViewController.swift in Sources */,
 				76442E7A2AEB847800B5577E /* SceneDelegate.swift in Sources */,
+				76DC7D792AF3299700F566B8 /* TodayWeather.swift in Sources */,
 				76DC7D722AF24E6E00F566B8 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

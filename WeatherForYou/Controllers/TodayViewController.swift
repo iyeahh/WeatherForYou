@@ -6,10 +6,15 @@
 //
 
 import UIKit
+import CoreLocation
 
 class TodayViewController: UIViewController {
 
-    var networkManager = NetworkManager.shared
+    let networkManager = NetworkManager.shared
+    let locationManager = CLLocationManager()
+
+    var lat: String = ""
+    var lon: String = ""
 
     let dateLabel: UILabel = {
         let label = UILabel()
@@ -65,7 +70,7 @@ class TodayViewController: UIViewController {
         setupLayout()
         setupCollectionView()
         registerCollecionViewCell()
-        start()
+        setupCoreLocation()
     }
 
     private func setupLayout() {
@@ -116,15 +121,45 @@ class TodayViewController: UIViewController {
         collectionView.register(HourlyWeatherCollectionViewCell.self, forCellWithReuseIdentifier: HourlyWeatherCollectionViewCell.identifier)
     }
 
+    func setupCoreLocation() {
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+    }
+
     func start() {
-        networkManager.fetchWeather(dateString: "20231101", xCoordinate: 55, yCoordinate: 127) { result in
+        let date = getDate()
+        let time = getTime()
+
+        networkManager.fetchWeather(dateString: date, timeString: time, xCoordinate: lat, yCoordinate: lon) { result in
             switch result {
-            case .success(let response):
-                print(response ?? "에러발생")
+            case .success(let weather):
+                guard let todayWeather = weather else { return }
+                DispatchQueue.main.async {
+                    self.dateLabel.text = todayWeather.date
+                    self.skyStatusLabel.text = todayWeather.skyStatus
+                    self.temperatureLabel.text = todayWeather.temperature
+                }
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
+    }
+
+    func getDate() -> String {
+        let date = Date()
+
+        let myDateFormatter = DateFormatter()
+        myDateFormatter.dateFormat = "yyyyMMdd"
+        return myDateFormatter.string(from: date)
+    }
+
+    func getTime() -> String {
+        let date = Date()
+
+        let myDateFormatter = DateFormatter()
+        myDateFormatter.dateFormat = "HH00"
+        return myDateFormatter.string(from: date)
     }
 }
 
@@ -143,3 +178,20 @@ extension TodayViewController: UICollectionViewDelegate {
 
 }
 
+extension TodayViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else {
+            return
+        }
+
+        locationManager.stopUpdatingLocation()
+
+        let latitude = Int(location.coordinate.latitude)
+        let longitude = Int(location.coordinate.longitude)
+
+        lat = String(latitude)
+        lon = String(longitude)
+
+        start()
+    }
+}
