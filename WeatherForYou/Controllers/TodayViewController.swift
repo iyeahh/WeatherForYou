@@ -8,6 +8,9 @@
 import UIKit
 
 class TodayViewController: UIViewController {
+
+    var networkManager = NetworkManager.shared
+
     let dateLabel: UILabel = {
         let label = UILabel()
         label.text = "2023년 11월 1일 수요일"
@@ -62,6 +65,7 @@ class TodayViewController: UIViewController {
         setupLayout()
         setupCollectionView()
         registerCollecionViewCell()
+        start()
     }
 
     private func setupLayout() {
@@ -110,6 +114,17 @@ class TodayViewController: UIViewController {
 
     func registerCollecionViewCell() {
         collectionView.register(HourlyWeatherCollectionViewCell.self, forCellWithReuseIdentifier: HourlyWeatherCollectionViewCell.identifier)
+    }
+
+    func start() {
+        networkManager.fetchWeather(dateString: "20231101", xCoordinate: 55, yCoordinate: 127) { result in
+            switch result {
+            case .success(let response):
+                print(response ?? "에러발생")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 }
 
