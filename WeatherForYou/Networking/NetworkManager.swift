@@ -21,10 +21,10 @@ final class NetworkManager {
 
     typealias NetworkCompletion = (Result<TodayWeather?, NetworkError>) -> Void
 
-    func fetchWeather(dateString: String, timeString: String, xCoordinate: String, yCoordinate: String, completion: @escaping NetworkCompletion) {
+    func fetchWeather(xCoordinate: Double, yCoordinate: Double, completion: @escaping NetworkCompletion) {
         guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String else { return }
 
-        let urlString = "\(NetworkConfig.baseURL)?serviceKey=\(apiKey)&\(NetworkConfig.baseParam)&base_time=\(timeString)&base_date=\(dateString)&nx=\(xCoordinate)&ny=\(yCoordinate)"
+        let urlString = "\(NetworkConfig.baseURL)&lat=\(xCoordinate)&lon=\(yCoordinate)&appid=\(apiKey)"
         print(urlString)
 
         performRequest(with: urlString) { result in
@@ -43,11 +43,13 @@ final class NetworkManager {
         let task = session.dataTask(with: request) { (data, response, error) in
             if error != nil {
                 completion(.failure(.networkingError))
+                print("에러있음")
                 return
             }
 
             guard let safeData = data else {
                 completion(.failure(.dataError))
+                print("데이터에러")
                 return
             }
 
@@ -55,6 +57,7 @@ final class NetworkManager {
                 completion(.success(weather))
             } else {
                 completion(.failure(.parseError))
+                print("파싱에러")
             }
         }
         task.resume()
@@ -62,9 +65,9 @@ final class NetworkManager {
 
     func parseJSON(_ weatherData: Data) -> TodayWeather? {
         do {
-            let decodedData = try JSONDecoder().decode(Weather.self, from: weatherData)
-            let weather = decodedData.response.body.items.item[0]
-            let todayWeather = TodayWeather(date: weather.baseDate, location: "서울", skyStatus: weather.category, temperature: weather.fcstValue)
+            let decodedData = try JSONDecoder().decode(CurrentWeather.self, from: weatherData)
+            guard let weather = decodedData.main else { return nil }
+            let todayWeather = TodayWeather(tempMin: weather.tempMin ?? 0.0, tempMax: weather.tempMax ?? 0.0, temperature: weather.temp ?? 0.0)
             return todayWeather
         } catch {
             print(error.localizedDescription)

@@ -13,8 +13,7 @@ class TodayViewController: UIViewController {
     let networkManager = NetworkManager.shared
     let locationManager = CLLocationManager()
 
-    var lat: String = ""
-    var lon: String = ""
+    var city: String = ""
 
     let dateLabel: UILabel = {
         let label = UILabel()
@@ -32,9 +31,9 @@ class TodayViewController: UIViewController {
         return label
     }()
 
-    let skyStatusLabel: UILabel = {
+    let tempRangeLabel: UILabel = {
         let label = UILabel()
-        label.text = "맑고 구름 조금"
+        label.text = "최저: 8 / 최고: 20"
         label.font = UIFont.systemFont(ofSize: 20)
         label.textColor = .white
         return label
@@ -76,14 +75,14 @@ class TodayViewController: UIViewController {
     private func setupLayout() {
         view.addSubview(dateLabel)
         view.addSubview(locationLabel)
-        view.addSubview(skyStatusLabel)
+        view.addSubview(tempRangeLabel)
         view.addSubview(weatherImageView)
         view.addSubview(temperatureLabel)
         view.addSubview(collectionView)
 
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
-        skyStatusLabel.translatesAutoresizingMaskIntoConstraints = false
+        tempRangeLabel.translatesAutoresizingMaskIntoConstraints = false
         weatherImageView.translatesAutoresizingMaskIntoConstraints = false
         temperatureLabel.translatesAutoresizingMaskIntoConstraints = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -95,11 +94,11 @@ class TodayViewController: UIViewController {
             locationLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             locationLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 40),
 
-            skyStatusLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            skyStatusLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 3),
+            tempRangeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            tempRangeLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 3),
 
             weatherImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            weatherImageView.topAnchor.constraint(equalTo: skyStatusLabel.bottomAnchor, constant: 80),
+            weatherImageView.topAnchor.constraint(equalTo: tempRangeLabel.bottomAnchor, constant: 80),
             weatherImageView.widthAnchor.constraint(equalToConstant: 200),
             weatherImageView.heightAnchor.constraint(equalToConstant: 200),
 
@@ -127,18 +126,18 @@ class TodayViewController: UIViewController {
         locationManager.startUpdatingLocation()
     }
 
-    func start() {
-        let date = getDate()
-        let time = getTime()
+    func start(x: Double, y: Double) {
+        networkManager.fetchWeather(xCoordinate: x, yCoordinate: y) { result in
+            let date = self.dateFormatter()
 
-        networkManager.fetchWeather(dateString: date, timeString: time, xCoordinate: lat, yCoordinate: lon) { result in
             switch result {
             case .success(let weather):
-                guard let todayWeather = weather else { return }
+                guard let currentWeather = weather else { return }
                 DispatchQueue.main.async {
-                    self.dateLabel.text = todayWeather.date
-                    self.skyStatusLabel.text = todayWeather.skyStatus
-                    self.temperatureLabel.text = todayWeather.temperature
+                    self.dateLabel.text = date
+                    self.locationLabel.text = self.city
+                    self.tempRangeLabel.text = "최저: \(currentWeather.tempMin)°C / 최고 \(currentWeather.tempMax)°C"
+                    self.temperatureLabel.text = "\(currentWeather.temperature)°C"
                 }
             case .failure(let error):
                 print(error.localizedDescription)
@@ -146,20 +145,14 @@ class TodayViewController: UIViewController {
         }
     }
 
-    func getDate() -> String {
-        let date = Date()
+    func dateFormatter() -> String {
+        let nowDate = Date()
 
-        let myDateFormatter = DateFormatter()
-        myDateFormatter.dateFormat = "yyyyMMdd"
-        return myDateFormatter.string(from: date)
-    }
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier:"ko_KR")
+        dateFormatter.dateFormat = "yyyy년 MM월 dd일 EEE"
 
-    func getTime() -> String {
-        let date = Date()
-
-        let myDateFormatter = DateFormatter()
-        myDateFormatter.dateFormat = "HH00"
-        return myDateFormatter.string(from: date)
+        return dateFormatter.string(from: nowDate)
     }
 }
 
@@ -167,7 +160,7 @@ extension TodayViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 10
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyWeatherCollectionViewCell.identifier, for: indexPath)
         return cell
@@ -186,12 +179,35 @@ extension TodayViewController: CLLocationManagerDelegate {
 
         locationManager.stopUpdatingLocation()
 
-        let latitude = Int(location.coordinate.latitude)
-        let longitude = Int(location.coordinate.longitude)
+        let latitude = location.coordinate.latitude
+        let longitude = location.coordinate.longitude
 
-        lat = String(latitude)
-        lon = String(longitude)
+        getCityNameFromCoordinates(latitude: latitude, longitude: longitude)
 
-        start()
+        start(x: latitude, y: longitude)
+    }
+
+    func getCityNameFromCoordinates(latitude: Double, longitude: Double) {
+        let location = CLLocation(latitude: CLLocationDegrees(latitude), longitude: CLLocationDegrees(longitude))
+        let geocoder = CLGeocoder()
+        let local = Locale(identifier: "Ko-kr")
+
+        geocoder.reverseGeocodeLocation(location, preferredLocale: local) { (placemarks, error) in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                return
+            }
+
+            if let placemark = placemarks?.first {
+                if let cityName = placemark.locality, let subCityName = placemark.subLocality {
+                    self.city = cityName + " " + subCityName
+                    print(self.city)
+                } else {
+                    print("도시 이름을 찾을 수 없음")
+                }
+            } else {
+                print("장소 정보를 찾을 수 없음")
+            }
+        }
     }
 }

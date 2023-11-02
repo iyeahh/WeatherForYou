@@ -8,6 +8,5 @@
 import Foundation
 
 struct NetworkConfig {
-    static let baseURL = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
-    static let baseParam = "&dataType=JSON"
+    static let baseURL = "https://api.openweathermap.org/data/2.5/weather?units=metric"
 }

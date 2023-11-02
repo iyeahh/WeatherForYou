@@ -8,16 +8,14 @@
 import UIKit
 
 struct TodayWeather {
-    let date: String
-    let location: String
-    let skyStatus: String
+    let tempMin: Double
+    let tempMax: Double
     var image = UIImage(named: "think3.001")
-    let temperature: String
+    let temperature: Double
 
-    init(date: String, location: String, skyStatus: String, temperature: String) {
-        self.date = date
-        self.location = location
-        self.skyStatus = skyStatus
+    init(tempMin: Double, tempMax: Double, temperature: Double) {
+        self.tempMin = tempMin
+        self.tempMax = tempMax
         self.temperature = temperature
     }
 }
