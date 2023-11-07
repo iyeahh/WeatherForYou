@@ -14,6 +14,7 @@ class TodayViewController: UIViewController {
     let locationManager = CLLocationManager()
 
     var city: String = ""
+    var weatherList: [WeatherInfo] = []
 
     let dateLabel: UILabel = {
         let label = UILabel()
@@ -42,6 +43,7 @@ class TodayViewController: UIViewController {
     let weatherImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "think3.001")
+        imageView.tintColor = .white
         return imageView
     }()
 
@@ -99,8 +101,8 @@ class TodayViewController: UIViewController {
 
             weatherImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             weatherImageView.topAnchor.constraint(equalTo: tempRangeLabel.bottomAnchor, constant: 80),
-            weatherImageView.widthAnchor.constraint(equalToConstant: 200),
-            weatherImageView.heightAnchor.constraint(equalToConstant: 200),
+            weatherImageView.widthAnchor.constraint(equalToConstant: 180),
+            weatherImageView.heightAnchor.constraint(equalToConstant: 180),
 
             temperatureLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             temperatureLabel.topAnchor.constraint(equalTo: weatherImageView.bottomAnchor, constant: 30),
@@ -114,6 +116,7 @@ class TodayViewController: UIViewController {
     func setupCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.showsHorizontalScrollIndicator = false
     }
 
     func registerCollecionViewCell() {
@@ -126,18 +129,37 @@ class TodayViewController: UIViewController {
         locationManager.startUpdatingLocation()
     }
 
-    func start(x: Double, y: Double) {
-        networkManager.fetchWeather(xCoordinate: x, yCoordinate: y) { result in
+    func start(x: String, y: String) {
+        networkManager.fetchWeather(lat: x, lon: y) { result in
             let date = self.dateFormatter()
 
             switch result {
             case .success(let weather):
-                guard let currentWeather = weather else { return }
+                guard let temp = weather.main?.temp else { return }
+                guard let feelsLikeTemp = weather.main?.feelsLike else { return }
+                let roundedTemp = round(temp)
+                let roundedFeelsLikeTemp = round(feelsLikeTemp)
+
                 DispatchQueue.main.async {
                     self.dateLabel.text = date
                     self.locationLabel.text = self.city
-                    self.tempRangeLabel.text = "최저: \(currentWeather.tempMin)°C / 최고 \(currentWeather.tempMax)°C"
-                    self.temperatureLabel.text = "\(currentWeather.temperature)°C"
+                    self.tempRangeLabel.text = "체감온도: \(Int(roundedFeelsLikeTemp))°C"
+                    self.temperatureLabel.text = "\(Int(roundedTemp))°C"
+                    self.weatherImageView.image = self.setImage(iconString: (weather.weather?.first?.icon)!)
+                    self.collectionView.reloadData()
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+
+        networkManager.fetchForecast(lat: x, lon: y) { result in
+
+            switch result {
+            case .success(let forecast):
+                self.weatherList = Array((forecast.weatherInfoList?.prefix(10))!)
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
                 }
             case .failure(let error):
                 print(error.localizedDescription)
@@ -150,19 +172,60 @@ class TodayViewController: UIViewController {
 
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier:"ko_KR")
-        dateFormatter.dateFormat = "yyyy년 MM월 dd일 EEE"
+        dateFormatter.dateFormat = "yyyy년 MM월 dd일 EEEE"
 
         return dateFormatter.string(from: nowDate)
+    }
+
+    func setImage(iconString: String) -> UIImage? {
+        switch iconString {
+        case "01n", "01d":
+            return UIImage(named: "sunny")
+        case "02n", "02d":
+            return UIImage(named: "clear-sky")
+        case "03n", "03d", "04n", "04d", "50n", "50d":
+            return UIImage(named: "cloud")
+        case "09n", "09d":
+            return UIImage(named: "rainy-day")
+        case "10n", "10d":
+            return UIImage(named: "rainy")
+        case "11n", "11d":
+            return UIImage(named: "lighting")
+        case "13n", "13d":
+            return UIImage(named: "snowflake")
+        default:
+            return UIImage(named: "sunny")
+        }
     }
 }
 
 extension TodayViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return weatherList.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyWeatherCollectionViewCell.identifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyWeatherCollectionViewCell.identifier, for: indexPath) as! HourlyWeatherCollectionViewCell
+
+        if let date = weatherList[indexPath.row].dtTxt {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS"
+            let convertDate = dateFormatter.date(from: date)
+
+            let myDateFormatter = DateFormatter()
+            myDateFormatter.dateFormat = "HH시"
+            let convertStr = myDateFormatter.string(from: convertDate!)
+
+            cell.timeLabel.text = convertStr
+        }
+
+        if let temp = weatherList[indexPath.row].mainInfo?.temp {
+            let roundedTemp = round(temp)
+            cell.temperatureLabel.text = "\(Int(roundedTemp))°C"
+        }
+
+        cell.weatherImageView.image = setImage(iconString: (weatherList[indexPath.row].weather?.first?.icon)!)
+
         return cell
     }
 }
@@ -184,7 +247,10 @@ extension TodayViewController: CLLocationManagerDelegate {
 
         getCityNameFromCoordinates(latitude: latitude, longitude: longitude)
 
-        start(x: latitude, y: longitude)
+        let strLat = String(latitude)
+        let strLon = String(longitude)
+
+        start(x: strLat, y: strLon)
     }
 
     func getCityNameFromCoordinates(latitude: Double, longitude: Double) {

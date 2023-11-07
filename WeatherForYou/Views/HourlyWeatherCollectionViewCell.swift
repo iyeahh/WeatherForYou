@@ -21,6 +21,7 @@ final class HourlyWeatherCollectionViewCell: UICollectionViewCell {
     let weatherImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "think3.001")
+        imageView.tintColor = .white
         return imageView
     }()
 
@@ -54,8 +55,8 @@ final class HourlyWeatherCollectionViewCell: UICollectionViewCell {
             timeLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             timeLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
 
-            weatherImageView.widthAnchor.constraint(equalToConstant: 50),
-            weatherImageView.heightAnchor.constraint(equalToConstant: 50),
+            weatherImageView.widthAnchor.constraint(equalToConstant: 40),
+            weatherImageView.heightAnchor.constraint(equalToConstant: 40),
             weatherImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             weatherImageView.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 5),
 

@@ -8,5 +8,10 @@
 import Foundation
 
 struct NetworkConfig {
-    static let baseURL = "https://api.openweathermap.org/data/2.5/weather?units=metric"
+    static let baseURL = "https://api.openweathermap.org/data/2.5"
+
+    enum URLPath: String {
+        case weather
+        case forecast
+    }
 }
