@@ -40,9 +40,9 @@ class TodayViewController: UIViewController {
         return label
     }()
 
-    let weatherImageView: UIImageView = {
+    var weatherImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "think3.001")
+        //imageView.image = UIImage(named: "think3.001")?.withRenderingMode(.alwaysTemplate)
         imageView.tintColor = .white
         return imageView
     }()
@@ -139,13 +139,17 @@ class TodayViewController: UIViewController {
                 guard let feelsLikeTemp = weather.main?.feelsLike else { return }
                 let roundedTemp = round(temp)
                 let roundedFeelsLikeTemp = round(feelsLikeTemp)
+                let image = self.setImage(iconString: (weather.weather?.first?.icon)!)?.withRenderingMode(.alwaysTemplate)
+                let (color1, color2) = self.setbackgroundColor(iconString: (weather.weather?.first?.icon)!)
 
                 DispatchQueue.main.async {
                     self.dateLabel.text = date
                     self.locationLabel.text = self.city
                     self.tempRangeLabel.text = "체감온도: \(Int(roundedFeelsLikeTemp))°C"
                     self.temperatureLabel.text = "\(Int(roundedTemp))°C"
-                    self.weatherImageView.image = self.setImage(iconString: (weather.weather?.first?.icon)!)
+                    self.weatherImageView.image = self.makeShadow(image: image)
+                    let layer = self.setBackground(color1: color1, color2: color2)
+                    self.view.layer.insertSublayer(layer, at: 0)
                     self.collectionView.reloadData()
                 }
             case .failure(let error):
@@ -196,6 +200,63 @@ class TodayViewController: UIViewController {
         default:
             return UIImage(named: "sunny")
         }
+    }
+
+    func setbackgroundColor(iconString: String) -> (UIColor, UIColor) {
+        switch iconString {
+        case "01n", "01d":
+            return (#colorLiteral(red: 0.8453043699, green: 0.4372865558, blue: 0.4445134401, alpha: 1), #colorLiteral(red: 0.6661237478, green: 0.28725788, blue: 0.3916630149, alpha: 1))
+        case "02n", "02d":
+            return (#colorLiteral(red: 0.8453043699, green: 0.4372865558, blue: 0.4445134401, alpha: 1), #colorLiteral(red: 0.6661237478, green: 0.28725788, blue: 0.3916630149, alpha: 1))
+        case "03n", "03d", "04n", "04d", "50n", "50d":
+            return (#colorLiteral(red: 0.7741769552, green: 0.829197824, blue: 0.5121616721, alpha: 1), #colorLiteral(red: 0.3986772895, green: 0.5372212529, blue: 0.3082891405, alpha: 1))
+        case "09n", "09d":
+            return (#colorLiteral(red: 0.4409177005, green: 0.6487060785, blue: 0.7984363437, alpha: 1), #colorLiteral(red: 0.4409177005, green: 0.6487060785, blue: 0.7984363437, alpha: 1))
+        case "10n", "10d":
+            return (#colorLiteral(red: 0.4409177005, green: 0.6487060785, blue: 0.7984363437, alpha: 1), #colorLiteral(red: 0.4409177005, green: 0.6487060785, blue: 0.7984363437, alpha: 1))
+        case "11n", "11d":
+            return (#colorLiteral(red: 0.9677416682, green: 0.9727140069, blue: 0.9898334146, alpha: 1), #colorLiteral(red: 0.9677416682, green: 0.9727140069, blue: 0.9898334146, alpha: 1))
+        case "13n", "13d":
+            return (#colorLiteral(red: 0.9677416682, green: 0.9727140069, blue: 0.9898334146, alpha: 1), #colorLiteral(red: 0.9677416682, green: 0.9727140069, blue: 0.9898334146, alpha: 1))
+        default:
+            return (#colorLiteral(red: 0.8453043699, green: 0.4372865558, blue: 0.4445134401, alpha: 1), #colorLiteral(red: 0.6661237478, green: 0.28725788, blue: 0.3916630149, alpha: 1))
+        }
+    }
+
+    func makeShadow(image: UIImage?) -> UIImage? {
+
+        guard let originalImage = image else { return nil }
+        originalImage.withTintColor(.white)
+
+        UIGraphicsBeginImageContextWithOptions(originalImage.size, false, 0.0)
+
+        if let context = UIGraphicsGetCurrentContext() {
+            let shadowOffset = CGSize(width: 5, height: 5)
+            let shadowBlur: CGFloat = 10.0
+            let shadowColor = UIColor.gray.cgColor
+
+            context.setShadow(offset: shadowOffset, blur: shadowBlur, color: shadowColor)
+
+            originalImage.draw(at: .zero)
+
+            let imageWithShadow = UIGraphicsGetImageFromCurrentImageContext()
+
+            UIGraphicsEndImageContext()
+
+            if let imageWithShadow = imageWithShadow {
+                return imageWithShadow
+            }
+        }
+        return nil
+    }
+
+    func setBackground(color1: UIColor, color2: UIColor) -> CAGradientLayer {
+        let gradientLayer = CAGradientLayer()
+
+        gradientLayer.frame = self.view.bounds
+        gradientLayer.colors = [color1.cgColor, color2.cgColor]
+
+        return gradientLayer
     }
 }
 
