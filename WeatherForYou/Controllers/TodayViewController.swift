@@ -42,7 +42,7 @@ class TodayViewController: UIViewController {
 
     var weatherImageView: UIImageView = {
         let imageView = UIImageView()
-        //imageView.image = UIImage(named: "think3.001")?.withRenderingMode(.alwaysTemplate)
+        imageView.image = UIImage(named: "think3.001")
         imageView.tintColor = .white
         return imageView
     }()
@@ -91,7 +91,7 @@ class TodayViewController: UIViewController {
 
         NSLayoutConstraint.activate([
             dateLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            dateLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            dateLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
 
             locationLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             locationLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 40),
