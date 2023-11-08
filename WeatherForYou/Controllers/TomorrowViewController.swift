@@ -1,5 +1,5 @@
 //
-//  YesterdayViewController.swift
+//  TomorrowViewController.swift
 //  WeatherForYou
 //
 //  Created by Bora Yang on 11/1/23.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class YesterdayViewController: UIViewController {
+class TomorrowViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

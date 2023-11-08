@@ -208,9 +208,9 @@ class TodayViewController: UIViewController {
     func setbackgroundColor(iconString: String) -> (UIColor, UIColor) {
         switch iconString {
         case "01n", "01d":
-            return (#colorLiteral(red: 0.9304228425, green: 0.6922988892, blue: 0.4968693256, alpha: 1), #colorLiteral(red: 0.8815497756, green: 0.5536080003, blue: 0.441262275, alpha: 1))
+            return (#colorLiteral(red: 0.9304228425, green: 0.6922988892, blue: 0.4968693256, alpha: 1), #colorLiteral(red: 0.8107313514, green: 0.3261011243, blue: 0.4575048685, alpha: 1))
         case "02n", "02d":
-            return (#colorLiteral(red: 0.8453043699, green: 0.4372865558, blue: 0.4445134401, alpha: 1), #colorLiteral(red: 0.6661237478, green: 0.28725788, blue: 0.3916630149, alpha: 1))
+            return (#colorLiteral(red: 0.9304228425, green: 0.6922988892, blue: 0.4968693256, alpha: 1), #colorLiteral(red: 0.8107313514, green: 0.3261011243, blue: 0.4575048685, alpha: 1))
         case "03n", "03d", "04n", "04d", "50n", "50d":
             return (#colorLiteral(red: 0.7741769552, green: 0.829197824, blue: 0.5121616721, alpha: 1), #colorLiteral(red: 0.3986772895, green: 0.5372212529, blue: 0.3082891405, alpha: 1))
         case "09n", "09d":
@@ -222,7 +222,7 @@ class TodayViewController: UIViewController {
         case "13n", "13d":
             return (#colorLiteral(red: 0.9677416682, green: 0.9727140069, blue: 0.9898334146, alpha: 1), #colorLiteral(red: 0.9677416682, green: 0.9727140069, blue: 0.9898334146, alpha: 1))
         default:
-            return (#colorLiteral(red: 0.8453043699, green: 0.4372865558, blue: 0.4445134401, alpha: 1), #colorLiteral(red: 0.6661237478, green: 0.28725788, blue: 0.3916630149, alpha: 1))
+            return (#colorLiteral(red: 0.9304228425, green: 0.6922988892, blue: 0.4968693256, alpha: 1), #colorLiteral(red: 0.8107313514, green: 0.3261011243, blue: 0.4575048685, alpha: 1))
         }
     }
 

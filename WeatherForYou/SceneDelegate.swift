@@ -18,17 +18,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let tabBarVC = UITabBarController()
 
-        let vc1 = YesterdayViewController()
-        let vc2 = TodayViewController()
+        let vc1 = TodayViewController()
+        let vc2 = TomorrowViewController()
         let vc3 = ThisWeekViewController()
 
-        vc1.title = "Yesterday"
-        vc2.title = "Today"
-        vc3.title = "This Week"
+        vc1.title = "오늘"
+        vc2.title = "내일, 모레"
+        vc3.title = "일주일"
 
         tabBarVC.setViewControllers([vc1, vc2, vc3], animated: false)
         tabBarVC.modalPresentationStyle = .fullScreen
-        tabBarVC.selectedIndex = 1
 
         let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)]
         let colorAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.foregroundColor: UIColor.white]
