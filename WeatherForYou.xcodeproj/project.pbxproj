@@ -9,10 +9,10 @@
 /* Begin PBXBuildFile section */
 		76442E782AEB847800B5577E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76442E772AEB847800B5577E /* AppDelegate.swift */; };
 		76442E7A2AEB847800B5577E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76442E792AEB847800B5577E /* SceneDelegate.swift */; };
-		76442E7C2AEB847800B5577E /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76442E7B2AEB847800B5577E /* TodayViewController.swift */; };
 		76442E812AEB847900B5577E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76442E802AEB847900B5577E /* Assets.xcassets */; };
 		76442E842AEB847900B5577E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76442E822AEB847900B5577E /* LaunchScreen.storyboard */; };
 		768BF4932AFA0A0400C1487B /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768BF4922AFA0A0400C1487B /* NetworkError.swift */; };
+		76B4821F2AFB53A80004A51C /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76442E7B2AEB847800B5577E /* TodayViewController.swift */; };
 		76DB704B2AF8BF3300A145AB /* Forecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DB704A2AF8BF3300A145AB /* Forecast.swift */; };
 		76DC7D602AF216D800F566B8 /* HourlyWeatherCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DC7D5F2AF216D800F566B8 /* HourlyWeatherCollectionViewCell.swift */; };
 		76DC7D622AF2280B00F566B8 /* YesterdayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DC7D612AF2280B00F566B8 /* YesterdayViewController.swift */; };
@@ -192,7 +192,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				76DC7D702AF24A3900F566B8 /* CurrentWeather.swift in Sources */,
-				76442E7C2AEB847800B5577E /* TodayViewController.swift in Sources */,
 				76442E782AEB847800B5577E /* AppDelegate.swift in Sources */,
 				76DC7D622AF2280B00F566B8 /* YesterdayViewController.swift in Sources */,
 				76DC7D602AF216D800F566B8 /* HourlyWeatherCollectionViewCell.swift in Sources */,
@@ -202,6 +201,7 @@
 				76DB704B2AF8BF3300A145AB /* Forecast.swift in Sources */,
 				768BF4932AFA0A0400C1487B /* NetworkError.swift in Sources */,
 				76DC7D722AF24E6E00F566B8 /* Constants.swift in Sources */,
+				76B4821F2AFB53A80004A51C /* TodayViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

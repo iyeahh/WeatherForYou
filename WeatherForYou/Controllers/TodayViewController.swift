@@ -43,7 +43,6 @@ class TodayViewController: UIViewController {
     var weatherImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "think3.001")
-        imageView.tintColor = .white
         return imageView
     }()
 
@@ -105,11 +104,11 @@ class TodayViewController: UIViewController {
             weatherImageView.heightAnchor.constraint(equalToConstant: 180),
 
             temperatureLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            temperatureLabel.topAnchor.constraint(equalTo: weatherImageView.bottomAnchor, constant: 30),
+            temperatureLabel.topAnchor.constraint(equalTo: weatherImageView.bottomAnchor),
 
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            collectionView.topAnchor.constraint(equalTo: temperatureLabel.bottomAnchor, constant: 30),
+            collectionView.topAnchor.constraint(equalTo: temperatureLabel.bottomAnchor, constant: 70),
             collectionView.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
@@ -139,7 +138,7 @@ class TodayViewController: UIViewController {
                 guard let feelsLikeTemp = weather.main?.feelsLike else { return }
                 let roundedTemp = round(temp)
                 let roundedFeelsLikeTemp = round(feelsLikeTemp)
-                let image = self.setImage(iconString: (weather.weather?.first?.icon)!)?.withRenderingMode(.alwaysTemplate)
+                let image = self.setImage(iconString: (weather.weather?.first?.icon)!)
                 let (color1, color2) = self.setbackgroundColor(iconString: (weather.weather?.first?.icon)!)
 
                 DispatchQueue.main.async {
@@ -147,7 +146,7 @@ class TodayViewController: UIViewController {
                     self.locationLabel.text = self.city
                     self.tempRangeLabel.text = "체감온도: \(Int(roundedFeelsLikeTemp))°C"
                     self.temperatureLabel.text = "\(Int(roundedTemp))°C"
-                    self.weatherImageView.image = self.makeShadow(image: image)
+                    self.weatherImageView.image = self.makeShadow(image: image)!
                     let layer = self.setBackground(color1: color1, color2: color2)
                     self.view.layer.insertSublayer(layer, at: 0)
                     self.collectionView.reloadData()
@@ -184,28 +183,32 @@ class TodayViewController: UIViewController {
     func setImage(iconString: String) -> UIImage? {
         switch iconString {
         case "01n", "01d":
-            return UIImage(named: "sunny")
+            return UIImage(named: "sun")
         case "02n", "02d":
-            return UIImage(named: "clear-sky")
-        case "03n", "03d", "04n", "04d", "50n", "50d":
+            return UIImage(named: "cloudy")
+        case "03n", "03d":
             return UIImage(named: "cloud")
+        case "04n", "04d":
+            return UIImage(named: "cloudcloud")
         case "09n", "09d":
-            return UIImage(named: "rainy-day")
+            return UIImage(named: "rain")
         case "10n", "10d":
-            return UIImage(named: "rainy")
+            return UIImage(named: "rain")
         case "11n", "11d":
-            return UIImage(named: "lighting")
+            return UIImage(named: "storm")
         case "13n", "13d":
-            return UIImage(named: "snowflake")
+            return UIImage(named: "hail")
+        case "50n", "50d":
+            return UIImage(named: "fog")
         default:
-            return UIImage(named: "sunny")
+            return UIImage(named: "sun")
         }
     }
 
     func setbackgroundColor(iconString: String) -> (UIColor, UIColor) {
         switch iconString {
         case "01n", "01d":
-            return (#colorLiteral(red: 0.8453043699, green: 0.4372865558, blue: 0.4445134401, alpha: 1), #colorLiteral(red: 0.6661237478, green: 0.28725788, blue: 0.3916630149, alpha: 1))
+            return (#colorLiteral(red: 0.9304228425, green: 0.6922988892, blue: 0.4968693256, alpha: 1), #colorLiteral(red: 0.8815497756, green: 0.5536080003, blue: 0.441262275, alpha: 1))
         case "02n", "02d":
             return (#colorLiteral(red: 0.8453043699, green: 0.4372865558, blue: 0.4445134401, alpha: 1), #colorLiteral(red: 0.6661237478, green: 0.28725788, blue: 0.3916630149, alpha: 1))
         case "03n", "03d", "04n", "04d", "50n", "50d":
@@ -232,8 +235,8 @@ class TodayViewController: UIViewController {
 
         if let context = UIGraphicsGetCurrentContext() {
             let shadowOffset = CGSize(width: 5, height: 5)
-            let shadowBlur: CGFloat = 10.0
-            let shadowColor = UIColor.gray.cgColor
+            let shadowBlur: CGFloat = 40.0
+            let shadowColor = UIColor.black.cgColor
 
             context.setShadow(offset: shadowOffset, blur: shadowBlur, color: shadowColor)
 
@@ -248,6 +251,7 @@ class TodayViewController: UIViewController {
             }
         }
         return nil
+
     }
 
     func setBackground(color1: UIColor, color2: UIColor) -> CAGradientLayer {
@@ -255,6 +259,9 @@ class TodayViewController: UIViewController {
 
         gradientLayer.frame = self.view.bounds
         gradientLayer.colors = [color1.cgColor, color2.cgColor]
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
+
 
         return gradientLayer
     }

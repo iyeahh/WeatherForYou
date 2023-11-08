@@ -21,7 +21,6 @@ final class HourlyWeatherCollectionViewCell: UICollectionViewCell {
     let weatherImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "think3.001")
-        imageView.tintColor = .white
         return imageView
     }()
 
