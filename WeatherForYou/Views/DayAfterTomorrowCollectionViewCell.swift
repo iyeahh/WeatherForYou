@@ -1,14 +1,14 @@
 //
-//  HourlyWeatherCollectionViewCell.swift
+//  DayAfterTomorrowCollectionViewCell.swift
 //  WeatherForYou
 //
-//  Created by Bora Yang on 11/1/23.
+//  Created by Bora Yang on 11/9/23.
 //
 
 import UIKit
 
-final class HourlyWeatherCollectionViewCell: UICollectionViewCell {
-    static let identifier = "HourlyWeatherCollectionViewCell"
+class DayAfterTomorrowCollectionViewCell: UICollectionViewCell {
+    static let identifier = "DayAfterTomorrowCollectionViewCell"
 
     let timeLabel: UILabel = {
         let label = UILabel()
@@ -36,7 +36,7 @@ final class HourlyWeatherCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         setupLayout()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

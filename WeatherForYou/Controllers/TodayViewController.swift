@@ -54,7 +54,7 @@ class TodayViewController: UIViewController {
         return label
     }()
 
-    let collectionView: UICollectionView = {
+    let todayCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: 60, height: 100)
@@ -79,14 +79,14 @@ class TodayViewController: UIViewController {
         view.addSubview(tempRangeLabel)
         view.addSubview(weatherImageView)
         view.addSubview(temperatureLabel)
-        view.addSubview(collectionView)
+        view.addSubview(todayCollectionView)
 
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
         tempRangeLabel.translatesAutoresizingMaskIntoConstraints = false
         weatherImageView.translatesAutoresizingMaskIntoConstraints = false
         temperatureLabel.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        todayCollectionView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             dateLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -106,20 +106,20 @@ class TodayViewController: UIViewController {
             temperatureLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             temperatureLabel.topAnchor.constraint(equalTo: weatherImageView.bottomAnchor),
 
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            collectionView.topAnchor.constraint(equalTo: temperatureLabel.bottomAnchor, constant: 70),
-            collectionView.heightAnchor.constraint(equalToConstant: 100)
+            todayCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            todayCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            todayCollectionView.topAnchor.constraint(equalTo: temperatureLabel.bottomAnchor, constant: 70),
+            todayCollectionView.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
     func setupCollectionView() {
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.showsHorizontalScrollIndicator = false
+        todayCollectionView.dataSource = self
+        todayCollectionView.delegate = self
+        todayCollectionView.showsHorizontalScrollIndicator = false
     }
 
     func registerCollecionViewCell() {
-        collectionView.register(HourlyWeatherCollectionViewCell.self, forCellWithReuseIdentifier: HourlyWeatherCollectionViewCell.identifier)
+        todayCollectionView.register(TodayCollectionViewCell.self, forCellWithReuseIdentifier: TodayCollectionViewCell.identifier)
     }
 
     func setupCoreLocation() {
@@ -140,6 +140,7 @@ class TodayViewController: UIViewController {
                 let roundedFeelsLikeTemp = round(feelsLikeTemp)
                 let image = self.setImage(iconString: (weather.weather?.first?.icon)!)
                 let (color1, color2) = self.setbackgroundColor(iconString: (weather.weather?.first?.icon)!)
+                let layer = self.setBackground(color1: color1, color2: color2)
 
                 DispatchQueue.main.async {
                     self.dateLabel.text = date
@@ -147,9 +148,8 @@ class TodayViewController: UIViewController {
                     self.tempRangeLabel.text = "체감온도: \(Int(roundedFeelsLikeTemp))°C"
                     self.temperatureLabel.text = "\(Int(roundedTemp))°C"
                     self.weatherImageView.image = self.makeShadow(image: image)!
-                    let layer = self.setBackground(color1: color1, color2: color2)
                     self.view.layer.insertSublayer(layer, at: 0)
-                    self.collectionView.reloadData()
+                    self.todayCollectionView.reloadData()
                 }
             case .failure(let error):
                 print(error.localizedDescription)
@@ -162,7 +162,7 @@ class TodayViewController: UIViewController {
             case .success(let forecast):
                 self.weatherList = Array((forecast.weatherInfoList?.prefix(10))!)
                 DispatchQueue.main.async {
-                    self.collectionView.reloadData()
+                    self.todayCollectionView.reloadData()
                 }
             case .failure(let error):
                 print(error.localizedDescription)
@@ -262,7 +262,6 @@ class TodayViewController: UIViewController {
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
         gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
 
-
         return gradientLayer
     }
 }
@@ -273,7 +272,7 @@ extension TodayViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyWeatherCollectionViewCell.identifier, for: indexPath) as! HourlyWeatherCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TodayCollectionViewCell.identifier, for: indexPath) as! TodayCollectionViewCell
 
         if let date = weatherList[indexPath.row].dtTxt {
             let dateFormatter = DateFormatter()
