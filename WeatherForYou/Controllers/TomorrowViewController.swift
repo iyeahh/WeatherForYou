@@ -65,7 +65,6 @@ class TomorrowViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGreen
         setupLayout()
         setupCollectionView()
         registerCollecionViewCell()
@@ -136,11 +135,11 @@ class TomorrowViewController: UIViewController {
                 let date = self.dateFormatter()
                 self.tomorrowWeatherList = Array((forecast.weatherInfoList?[6..<14])!)
                 self.datAfterTomorrowWeatherList = Array((forecast.weatherInfoList?[14..<22])!)
-                let layer = self.setBackground(color1: #colorLiteral(red: 0.6723831892, green: 0.5646241307, blue: 0.7415238023, alpha: 1),color2: #colorLiteral(red: 0.2927551866, green: 0.2779331803, blue: 0.5755700469, alpha: 1))
 
                 DispatchQueue.main.async {
                     self.tomorrowDateLabel.text = date.0
                     self.dayAfterTomorrowDateLabel.text = date.1
+                    let layer = self.setBackground(color1: #colorLiteral(red: 0.6723831892, green: 0.5646241307, blue: 0.7415238023, alpha: 1),color2: #colorLiteral(red: 0.2927551866, green: 0.2779331803, blue: 0.5755700469, alpha: 1))
                     self.view.layer.insertSublayer(layer, at: 0)
                     self.locationLabel.text = self.city
                     self.tomorrowCollectionView.reloadData()

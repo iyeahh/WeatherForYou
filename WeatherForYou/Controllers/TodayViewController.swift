@@ -139,8 +139,6 @@ class TodayViewController: UIViewController {
                 let roundedTemp = round(temp)
                 let roundedFeelsLikeTemp = round(feelsLikeTemp)
                 let image = self.setImage(iconString: (weather.weather?.first?.icon)!)
-                let (color1, color2) = self.setbackgroundColor(iconString: (weather.weather?.first?.icon)!)
-                let layer = self.setBackground(color1: color1, color2: color2)
 
                 DispatchQueue.main.async {
                     self.dateLabel.text = date
@@ -148,6 +146,8 @@ class TodayViewController: UIViewController {
                     self.tempRangeLabel.text = "체감온도: \(Int(roundedFeelsLikeTemp))°C"
                     self.temperatureLabel.text = "\(Int(roundedTemp))°C"
                     self.weatherImageView.image = self.makeShadow(image: image)!
+                    let (color1, color2) = self.setbackgroundColor(iconString: (weather.weather?.first?.icon)!)
+                    let layer = self.setBackground(color1: color1, color2: color2)
                     self.view.layer.insertSublayer(layer, at: 0)
                     self.todayCollectionView.reloadData()
                 }
