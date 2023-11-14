@@ -14,15 +14,12 @@ struct WeekWeatherImage: Codable {
 
 // MARK: - Response
 struct ImageResponse: Codable {
-    let header: Header?
     let body: ImageBody?
 }
 
 // MARK: - Body
 struct ImageBody: Codable {
-    let dataType: String?
     let items: ImageItems?
-    let pageNo, numOfRows, totalCount: Int?
 }
 
 // MARK: - Items
@@ -46,9 +43,4 @@ struct ImageItem: Codable {
         case regID = "regId"
         case rnSt3Am, rnSt3Pm, rnSt4Am, rnSt4Pm, rnSt5Am, rnSt5Pm, rnSt6Am, rnSt6Pm, rnSt7Am, rnSt7Pm, rnSt8, rnSt9, rnSt10, wf3Am, wf3Pm, wf4Am, wf4Pm, wf5Am, wf5Pm, wf6Am, wf6Pm, wf7Am, wf7Pm, wf8, wf9, wf10
     }
-}
-
-// MARK: - Header
-struct Header: Codable {
-    let resultCode, resultMsg: String?
 }
