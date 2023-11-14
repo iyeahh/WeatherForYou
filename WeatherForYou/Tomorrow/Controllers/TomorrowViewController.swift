@@ -167,6 +167,17 @@ class TomorrowViewController: UIViewController {
         return (dateFormatter.string(from: tomorrowDate), dateFormatter.string(from: afterDayTomorrowDate))
     }
 
+    func dateFormatter(date: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS"
+        let convertDate = dateFormatter.date(from: date)
+
+        let myDateFormatter = DateFormatter()
+        myDateFormatter.dateFormat = "HH시"
+
+        return myDateFormatter.string(from: convertDate!)
+    }
+
     func setImage(iconString: String) -> UIImage? {
         switch iconString {
         case "01n", "01d":
@@ -202,7 +213,6 @@ class TomorrowViewController: UIViewController {
 
         return gradientLayer
     }
-
 }
 
 extension TomorrowViewController: UICollectionViewDataSource {
@@ -221,15 +231,7 @@ extension TomorrowViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TomorrowCollectionViewCell.identifier, for: indexPath) as! TomorrowCollectionViewCell
 
             if let date = tomorrowWeatherList[indexPath.row].dtTxt {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS"
-                let convertDate = dateFormatter.date(from: date)
-
-                let myDateFormatter = DateFormatter()
-                myDateFormatter.dateFormat = "HH시"
-                let convertStr = myDateFormatter.string(from: convertDate!)
-
-                cell.timeLabel.text = convertStr
+                cell.timeLabel.text = dateFormatter(date: date)
             }
 
             if let temp = tomorrowWeatherList[indexPath.row].mainInfo?.temp {
@@ -245,15 +247,7 @@ extension TomorrowViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayAfterTomorrowCollectionViewCell.identifier, for: indexPath) as! DayAfterTomorrowCollectionViewCell
 
             if let date = datAfterTomorrowWeatherList[indexPath.row].dtTxt {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS"
-                let convertDate = dateFormatter.date(from: date)
-
-                let myDateFormatter = DateFormatter()
-                myDateFormatter.dateFormat = "HH시"
-                let convertStr = myDateFormatter.string(from: convertDate!)
-
-                cell.timeLabel.text = convertStr
+                cell.timeLabel.text = dateFormatter(date: date)
             }
 
             if let temp = datAfterTomorrowWeatherList[indexPath.row].mainInfo?.temp {

@@ -151,7 +151,6 @@ class TodayViewController: UIViewController {
         }
 
         networkManager.fetchForecast(lat: x, lon: y) { result in
-
             switch result {
             case .success(let forecast):
                 self.weatherList = Array((forecast.weatherInfoList?.prefix(10))!)
@@ -172,6 +171,17 @@ class TodayViewController: UIViewController {
         dateFormatter.dateFormat = "yyyy년 MM월 dd일 EEEE"
 
         return dateFormatter.string(from: nowDate)
+    }
+
+    func dateFormatter(date: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS"
+        let convertDate = dateFormatter.date(from: date)
+
+        let myDateFormatter = DateFormatter()
+        myDateFormatter.dateFormat = "HH시"
+
+        return myDateFormatter.string(from: convertDate!)
     }
 
     func setImage(iconString: String) -> UIImage? {
@@ -223,7 +233,6 @@ class TodayViewController: UIViewController {
     func makeShadow(image: UIImage?) -> UIImage? {
 
         guard let originalImage = image else { return nil }
-        originalImage.withTintColor(.white)
 
         UIGraphicsBeginImageContextWithOptions(originalImage.size, false, 0.0)
 
@@ -245,7 +254,6 @@ class TodayViewController: UIViewController {
             }
         }
         return nil
-
     }
 
     func setBackground(color1: UIColor, color2: UIColor) -> CAGradientLayer {
@@ -269,15 +277,7 @@ extension TodayViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TodayCollectionViewCell.identifier, for: indexPath) as! TodayCollectionViewCell
 
         if let date = weatherList[indexPath.row].dtTxt {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS"
-            let convertDate = dateFormatter.date(from: date)
-
-            let myDateFormatter = DateFormatter()
-            myDateFormatter.dateFormat = "HH시"
-            let convertStr = myDateFormatter.string(from: convertDate!)
-
-            cell.timeLabel.text = convertStr
+            cell.timeLabel.text = dateFormatter(date: date)
         }
 
         if let temp = weatherList[indexPath.row].mainInfo?.temp {

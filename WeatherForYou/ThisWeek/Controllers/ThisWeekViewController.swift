@@ -14,8 +14,6 @@ class ThisWeekViewController: UIViewController {
     let locationManager = CLLocationManager()
 
     var city: String = ""
-    var regionCode: String = ""
-    var imageRegionCode: String = ""
     var array: Item?
     var imageArray: ImageItem?
     var weekWeatherArray: [WeekWeatherEntity] = []
@@ -83,7 +81,6 @@ class ThisWeekViewController: UIViewController {
         let date = dateFormatter()
         group.enter()
         networkManager.fetchWeekWeather(location: regionCode, date: date) { result in
-
             switch result {
             case .success(let weekWeather):
                 guard let item = weekWeather.response?.body?.items?.item?.first else { return }
@@ -189,6 +186,70 @@ class ThisWeekViewController: UIViewController {
             return UIImage.weatherImage.sun
         }
     }
+
+    func getRegionCode(city: String) -> String {
+        switch city {
+        case "서울특별시":
+            return "11B10101"
+        case "부산광역시":
+            return "11H20201"
+        case "인천광역시":
+            return "11B20201"
+        case "대구광역시":
+            return "11H10701"
+        case "대전광역시":
+            return "11C20401"
+        case "광주광역시":
+            return "11F20501"
+        case "경기도":
+            return "11B20601"
+        case "울산광역시":
+            return "11H20101"
+        case "충청남도":
+            return "11C20301"
+        case "충청북도":
+            return "11C10301"
+        case "경상남도":
+            return "11H20301"
+        case "경상북도":
+            return "11H10201"
+        case "전라남도":
+            return "11F20401"
+        case "전라북도":
+            return "11F10201"
+        case "제주특별자치도":
+            return "11G00201"
+        case "강원도":
+            return "11D10401"
+        default:
+            return "11B10101"
+        }
+    }
+
+    func getImageRegionCode(city: String) -> String {
+        switch city {
+        case "서울특별시", "인천광역시", "경기도":
+            return "11B00000"
+        case "부산광역시", "울산광역시", "경상남도":
+            return "11H20000"
+        case "대전광역시", "충청남도":
+            return "11C20000"
+        case "충청북도":
+            return "11C10000"
+        case "경상북도", "대구광역시":
+            return "11H10000"
+        case "전라남도", "광주광역시":
+            return "11F20000"
+        case "전라북도":
+            return "11F10000"
+        case "제주특별자치도":
+            return "11G00201"
+        case "강원도":
+            return "11D20000"
+        default:
+            return "11B00000"
+        }
+    }
 }
 
 extension ThisWeekViewController: UITableViewDataSource {
@@ -198,11 +259,12 @@ extension ThisWeekViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: WeekWeatherTableViewCell.identifier, for: indexPath) as! WeekWeatherTableViewCell
-        guard let tempMax = weekWeatherArray[indexPath.row].tempMax,
-              let tempMin = weekWeatherArray[indexPath.row].tempMin,
-              let afterHours = weekWeatherArray[indexPath.row].afterHours,
-              let tempImage = weekWeatherArray[indexPath.row].tempImage,
-              let rain = weekWeatherArray[indexPath.row].rain else { return cell }
+        let weekWeather = weekWeatherArray[indexPath.row]
+        guard let tempMax = weekWeather.tempMax,
+              let tempMin = weekWeather.tempMin,
+              let afterHours = weekWeather.afterHours,
+              let tempImage = weekWeather.tempImage,
+              let rain = weekWeather.rain else { return cell }
 
         cell.dateLabel.text = dateFormatter(afterHours: afterHours)
         cell.weatherImageView.image = tempImage
@@ -248,66 +310,11 @@ extension ThisWeekViewController: CLLocationManagerDelegate {
             if let placemark = placemarks?.first {
                 if let cityName = placemark.locality, let subCityName = placemark.subLocality {
                     self.city = cityName + " " + subCityName
-                    switch placemark.administrativeArea {
-                    case "서울특별시":
-                        self.regionCode = "11B10101"
-                    case "부산광역시":
-                        self.regionCode = "11H20201"
-                    case "인천광역시":
-                        self.regionCode = "11B20201"
-                    case "대구광역시":
-                        self.regionCode = "11H10701"
-                    case "대전광역시":
-                        self.regionCode = "11C20401"
-                    case "광주광역시":
-                        self.regionCode = "11F20501"
-                    case "경기도":
-                        self.regionCode = "11B20601"
-                    case "울산광역시":
-                        self.regionCode = "11H20101"
-                    case "충청남도":
-                        self.regionCode = "11C20301"
-                    case "충청북도":
-                        self.regionCode = "11C10301"
-                    case "경상남도":
-                        self.regionCode = "11H20301"
-                    case "경상북도":
-                        self.regionCode = "11H10201"
-                    case "전라남도":
-                        self.regionCode = "11F20401"
-                    case "전라북도":
-                        self.regionCode = "11F10201"
-                    case "제주특별자치도":
-                        self.regionCode = "11G00201"
-                    case "강원도":
-                        self.regionCode = "11D10401"
-                    default:
-                        self.regionCode = "11B10101"
-                    }
+                    guard let city = placemark.administrativeArea else { return }
+                    let regionCode = getRegionCode(city: city)
+                    let imageRegionCode = getImageRegionCode(city: city)
 
-                    switch placemark.administrativeArea {
-                    case "서울특별시", "인천광역시", "경기도":
-                        self.imageRegionCode = "11B00000"
-                    case "부산광역시", "울산광역시", "경상남도":
-                        self.imageRegionCode = "11H20000"
-                    case "대전광역시", "충청남도":
-                        self.imageRegionCode = "11C20000"
-                    case "충청북도":
-                        self.imageRegionCode = "11C10000"
-                    case "경상북도", "대구광역시":
-                        self.imageRegionCode = "11H10000"
-                    case "전라남도", "광주광역시":
-                        self.imageRegionCode = "11F20000"
-                    case "전라북도":
-                        self.imageRegionCode = "11F10000"
-                    case "제주특별자치도":
-                        self.regionCode = "11G00201"
-                    case "강원도":
-                        self.regionCode = "11D20000"
-                    default:
-                        self.regionCode = "11B10101"
-                    }
-                    self.start(regionCode: self.regionCode, imageRegionCode: self.imageRegionCode)
+                    self.start(regionCode: regionCode, imageRegionCode: imageRegionCode)
                 } else {
                     print("도시 이름을 찾을 수 없음")
                 }
