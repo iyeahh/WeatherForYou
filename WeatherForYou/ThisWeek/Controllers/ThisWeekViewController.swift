@@ -161,14 +161,14 @@ class ThisWeekViewController: UIViewController {
     }
 
     func convertWeekWeather(array: Item, imageArray: ImageItem) {
-        let third = WeekWeatherEntity(afterHours: 72, tempMin: array.taMin3, tempMax: array.taMax3, tempImage: getImage(message: imageArray.wf3Am!), rain: imageArray.rnSt3Am)
-        let fourth = WeekWeatherEntity(afterHours: 96, tempMin: array.taMin4, tempMax: array.taMax4, tempImage: getImage(message: imageArray.wf4Am!), rain: imageArray.rnSt4Am)
-        let fifth = WeekWeatherEntity(afterHours: 120, tempMin: array.taMin5, tempMax: array.taMax5, tempImage: getImage(message: imageArray.wf5Am!), rain: imageArray.rnSt5Am)
-        let sixth = WeekWeatherEntity(afterHours: 144, tempMin: array.taMin6, tempMax: array.taMax6, tempImage: getImage(message: imageArray.wf6Am!), rain: imageArray.rnSt6Am)
-        let seventh = WeekWeatherEntity(afterHours: 168, tempMin: array.taMin7, tempMax: array.taMax7, tempImage: getImage(message: imageArray.wf7Am!), rain: imageArray.rnSt7Am)
-        let eighth = WeekWeatherEntity(afterHours: 192, tempMin: array.taMin8, tempMax: array.taMax8, tempImage: getImage(message: imageArray.wf8!), rain: imageArray.rnSt8)
-        let nineth = WeekWeatherEntity(afterHours: 216, tempMin: array.taMin9, tempMax: array.taMax9, tempImage: getImage(message: imageArray.wf9!), rain: imageArray.rnSt9)
-        let tenth = WeekWeatherEntity(afterHours: 240, tempMin: array.taMin10, tempMax: array.taMax10, tempImage: getImage(message: imageArray.wf10!), rain: imageArray.rnSt10)
+        let third = WeekWeatherEntity(afterHours: 72, tempImage: getImage(message: imageArray.wf3Am!), tempMax: array.taMax3, tempMin: array.taMin3, rain: imageArray.rnSt3Am)
+        let fourth = WeekWeatherEntity(afterHours: 96, tempImage: getImage(message: imageArray.wf4Am!), tempMax: array.taMax4, tempMin: array.taMin4, rain: imageArray.rnSt4Am)
+        let fifth = WeekWeatherEntity(afterHours: 120, tempImage: getImage(message: imageArray.wf5Am!), tempMax: array.taMax5, tempMin: array.taMin5, rain: imageArray.rnSt5Am)
+        let sixth = WeekWeatherEntity(afterHours: 144, tempImage: getImage(message: imageArray.wf6Am!), tempMax: array.taMax6, tempMin: array.taMin6, rain: imageArray.rnSt6Am)
+        let seventh = WeekWeatherEntity(afterHours: 168, tempImage: getImage(message: imageArray.wf7Am!), tempMax: array.taMax7, tempMin: array.taMin7, rain: imageArray.rnSt7Am)
+        let eighth = WeekWeatherEntity(afterHours: 192, tempImage: getImage(message: imageArray.wf8!), tempMax: array.taMax8, tempMin: array.taMin8, rain: imageArray.rnSt8)
+        let nineth = WeekWeatherEntity(afterHours: 216, tempImage: getImage(message: imageArray.wf9!), tempMax: array.taMax9, tempMin: array.taMin9, rain: imageArray.rnSt9)
+        let tenth = WeekWeatherEntity(afterHours: 240, tempImage: getImage(message: imageArray.wf10!), tempMax: array.taMax10, tempMin: array.taMin10, rain: imageArray.rnSt10)
 
         weekWeatherArray = [third, fourth, fifth, sixth, seventh, eighth, nineth, tenth]
     }
