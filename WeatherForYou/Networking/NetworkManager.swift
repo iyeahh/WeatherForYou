@@ -34,7 +34,6 @@ final class NetworkManager {
     func fetchWeekWeather(location: String, date: String, completion: @escaping (Result<WeekWeather, NetworkError>) -> Void) {
         guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY_2") as? String else { return }
         let urlString = "\(NetworkConfig.weekWeatherURL)&regId=\(location)&tmFc=\(date)&serviceKey=\(apiKey)"
-        print(urlString)
         guard let url = URL(string: urlString) else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -45,7 +44,6 @@ final class NetworkManager {
     func fetchWeekWeatherImage(location: String, date: String, completion: @escaping (Result<WeekWeatherImage, NetworkError>) -> Void) {
         guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY_2") as? String else { return }
         let urlString = "\(NetworkConfig.weekWeatherImageURL)&regId=\(location)&tmFc=\(date)&serviceKey=\(apiKey)"
-        print(urlString)
         guard let url = URL(string: urlString) else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"

@@ -18,6 +18,8 @@
 		765E47C52AFCD25A00060F29 /* WeekWeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765E47C42AFCD25A00060F29 /* WeekWeatherTableViewCell.swift */; };
 		768BF4932AFA0A0400C1487B /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768BF4922AFA0A0400C1487B /* NetworkError.swift */; };
 		76917C722B0330C400A4BEA0 /* WeekWeatherImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76917C712B0330C400A4BEA0 /* WeekWeatherImage.swift */; };
+		76917C752B03880800A4BEA0 /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76917C742B03880800A4BEA0 /* ColorTheme.swift */; };
+		76917C772B03881700A4BEA0 /* ImageTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76917C762B03881700A4BEA0 /* ImageTheme.swift */; };
 		76B4821F2AFB53A80004A51C /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76442E7B2AEB847800B5577E /* TodayViewController.swift */; };
 		76DB704B2AF8BF3300A145AB /* Forecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DB704A2AF8BF3300A145AB /* Forecast.swift */; };
 		76DC7D602AF216D800F566B8 /* TodayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DC7D5F2AF216D800F566B8 /* TodayCollectionViewCell.swift */; };
@@ -43,6 +45,8 @@
 		765E47C42AFCD25A00060F29 /* WeekWeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekWeatherTableViewCell.swift; sourceTree = "<group>"; };
 		768BF4922AFA0A0400C1487B /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		76917C712B0330C400A4BEA0 /* WeekWeatherImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekWeatherImage.swift; sourceTree = "<group>"; };
+		76917C742B03880800A4BEA0 /* ColorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTheme.swift; sourceTree = "<group>"; };
+		76917C762B03881700A4BEA0 /* ImageTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTheme.swift; sourceTree = "<group>"; };
 		76DB704A2AF8BF3300A145AB /* Forecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forecast.swift; sourceTree = "<group>"; };
 		76DC7D5F2AF216D800F566B8 /* TodayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayCollectionViewCell.swift; sourceTree = "<group>"; };
 		76DC7D612AF2280B00F566B8 /* TomorrowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TomorrowViewController.swift; sourceTree = "<group>"; };
@@ -76,6 +80,7 @@
 			children = (
 				76442E772AEB847800B5577E /* AppDelegate.swift */,
 				76442E792AEB847800B5577E /* SceneDelegate.swift */,
+				76917C732B0387AB00A4BEA0 /* Extensions */,
 				76DC7D662AF2345300F566B8 /* Helpers */,
 				76DC7D692AF2350700F566B8 /* Networking */,
 				76DC7D6C2AF23EEB00F566B8 /* Models */,
@@ -86,6 +91,15 @@
 				76442E852AEB847900B5577E /* Info.plist */,
 			);
 			path = WeatherForYou;
+			sourceTree = "<group>";
+		};
+		76917C732B0387AB00A4BEA0 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				76917C742B03880800A4BEA0 /* ColorTheme.swift */,
+				76917C762B03881700A4BEA0 /* ImageTheme.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		76DC7D5C2AF203B200F566B8 /* Views */ = {
@@ -214,10 +228,12 @@
 				765E47C22AFCCEA000060F29 /* WeekWeather.swift in Sources */,
 				76DC7D622AF2280B00F566B8 /* TomorrowViewController.swift in Sources */,
 				76DC7D602AF216D800F566B8 /* TodayCollectionViewCell.swift in Sources */,
+				76917C772B03881700A4BEA0 /* ImageTheme.swift in Sources */,
 				765E47BE2AFCB2CC00060F29 /* DayAfterTomorrowCollectionViewCell.swift in Sources */,
 				76DC7D6B2AF2352600F566B8 /* NetworkManager.swift in Sources */,
 				76DC7D652AF2282900F566B8 /* ThisWeekViewController.swift in Sources */,
 				76442E7A2AEB847800B5577E /* SceneDelegate.swift in Sources */,
+				76917C752B03880800A4BEA0 /* ColorTheme.swift in Sources */,
 				76DB704B2AF8BF3300A145AB /* Forecast.swift in Sources */,
 				76917C722B0330C400A4BEA0 /* WeekWeatherImage.swift in Sources */,
 				765E47C52AFCD25A00060F29 /* WeekWeatherTableViewCell.swift in Sources */,

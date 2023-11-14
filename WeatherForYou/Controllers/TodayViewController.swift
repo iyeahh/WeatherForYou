@@ -18,7 +18,6 @@ class TodayViewController: UIViewController {
 
     let dateLabel: UILabel = {
         let label = UILabel()
-        label.text = "2023년 11월 1일 수요일"
         label.font = UIFont.systemFont(ofSize: 18)
         label.textColor = .white
         return label
@@ -26,7 +25,6 @@ class TodayViewController: UIViewController {
 
     let locationLabel: UILabel = {
         let label = UILabel()
-        label.text = "서울 관악구"
         label.font = UIFont.systemFont(ofSize: 30)
         label.textColor = .white
         return label
@@ -34,7 +32,6 @@ class TodayViewController: UIViewController {
 
     let tempRangeLabel: UILabel = {
         let label = UILabel()
-        label.text = "최저: 8 / 최고: 20"
         label.font = UIFont.systemFont(ofSize: 20)
         label.textColor = .white
         return label
@@ -42,13 +39,11 @@ class TodayViewController: UIViewController {
 
     var weatherImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "think3.001")
         return imageView
     }()
 
     let temperatureLabel: UILabel = {
         let label = UILabel()
-        label.text = "18도"
         label.font = UIFont.systemFont(ofSize: 40)
         label.textColor = .white
         return label
@@ -66,7 +61,6 @@ class TodayViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGreen
         setupLayout()
         setupCollectionView()
         registerCollecionViewCell()
@@ -183,46 +177,46 @@ class TodayViewController: UIViewController {
     func setImage(iconString: String) -> UIImage? {
         switch iconString {
         case "01n", "01d":
-            return UIImage(named: "sun")
+            return UIImage.weatherImage.sun
         case "02n", "02d":
-            return UIImage(named: "cloudy")
+            return UIImage.weatherImage.cloudy
         case "03n", "03d":
-            return UIImage(named: "cloud")
+            return UIImage.weatherImage.cloud
         case "04n", "04d":
-            return UIImage(named: "cloudcloud")
+            return UIImage.weatherImage.cloudCloud
         case "09n", "09d":
-            return UIImage(named: "rain")
+            return UIImage.weatherImage.rain
         case "10n", "10d":
-            return UIImage(named: "rain")
+            return UIImage.weatherImage.rain
         case "11n", "11d":
-            return UIImage(named: "storm")
+            return UIImage.weatherImage.storm
         case "13n", "13d":
-            return UIImage(named: "hail")
+            return UIImage.weatherImage.hail
         case "50n", "50d":
-            return UIImage(named: "fog")
+            return UIImage.weatherImage.fog
         default:
-            return UIImage(named: "sun")
+            return UIImage.weatherImage.sun
         }
     }
 
     func setbackgroundColor(iconString: String) -> (UIColor, UIColor) {
         switch iconString {
         case "01n", "01d":
-            return (#colorLiteral(red: 0.9304228425, green: 0.6922988892, blue: 0.4968693256, alpha: 1), #colorLiteral(red: 0.8107313514, green: 0.3261011243, blue: 0.4575048685, alpha: 1))
+            return UIColor.weatherTheme.sun
         case "02n", "02d":
-            return (#colorLiteral(red: 0.9304228425, green: 0.6922988892, blue: 0.4968693256, alpha: 1), #colorLiteral(red: 0.8107313514, green: 0.3261011243, blue: 0.4575048685, alpha: 1))
+            return UIColor.weatherTheme.sun
         case "03n", "03d", "04n", "04d", "50n", "50d":
-            return (#colorLiteral(red: 0.7741769552, green: 0.829197824, blue: 0.5121616721, alpha: 1), #colorLiteral(red: 0.3986772895, green: 0.5372212529, blue: 0.3082891405, alpha: 1))
+            return UIColor.weatherTheme.cloud
         case "09n", "09d":
-            return (#colorLiteral(red: 0.4409177005, green: 0.6487060785, blue: 0.7984363437, alpha: 1), #colorLiteral(red: 0.4409177005, green: 0.6487060785, blue: 0.7984363437, alpha: 1))
+            return UIColor.weatherTheme.rain
         case "10n", "10d":
-            return (#colorLiteral(red: 0.4409177005, green: 0.6487060785, blue: 0.7984363437, alpha: 1), #colorLiteral(red: 0.4409177005, green: 0.6487060785, blue: 0.7984363437, alpha: 1))
+            return UIColor.weatherTheme.rain
         case "11n", "11d":
-            return (#colorLiteral(red: 0.9677416682, green: 0.9727140069, blue: 0.9898334146, alpha: 1), #colorLiteral(red: 0.9677416682, green: 0.9727140069, blue: 0.9898334146, alpha: 1))
+            return UIColor.weatherTheme.snow
         case "13n", "13d":
-            return (#colorLiteral(red: 0.9677416682, green: 0.9727140069, blue: 0.9898334146, alpha: 1), #colorLiteral(red: 0.9677416682, green: 0.9727140069, blue: 0.9898334146, alpha: 1))
+            return UIColor.weatherTheme.snow
         default:
-            return (#colorLiteral(red: 0.9304228425, green: 0.6922988892, blue: 0.4968693256, alpha: 1), #colorLiteral(red: 0.8107313514, green: 0.3261011243, blue: 0.4575048685, alpha: 1))
+            return UIColor.weatherTheme.sun
         }
     }
 
@@ -334,7 +328,6 @@ extension TodayViewController: CLLocationManagerDelegate {
             if let placemark = placemarks?.first {
                 if let cityName = placemark.locality, let subCityName = placemark.subLocality {
                     self.city = cityName + " " + subCityName
-                    print(self.city)
                 } else {
                     print("도시 이름을 찾을 수 없음")
                 }

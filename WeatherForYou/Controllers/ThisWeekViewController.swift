@@ -24,7 +24,6 @@ class ThisWeekViewController: UIViewController {
 
     let locationLabel: UILabel = {
         let label = UILabel()
-        label.text = "서울 관악구"
         label.font = UIFont.systemFont(ofSize: 30)
         label.textColor = .white
         return label
@@ -91,7 +90,7 @@ class ThisWeekViewController: UIViewController {
                 self.array = item
                 self.group.leave()
                 DispatchQueue.main.async {
-                    let layer = self.setBackground(color1: #colorLiteral(red: 0.2927551866, green: 0.2779331803, blue: 0.5755700469, alpha: 1),color2: #colorLiteral(red: 0.6723831892, green: 0.5646241307, blue: 0.7415238023, alpha: 1))
+                    let layer = self.setBackground(color1: UIColor.weatherTheme.baseReversed.0 ,color2: UIColor.weatherTheme.baseReversed.1)
                     self.view.layer.insertSublayer(layer, at: 0)
                     self.locationLabel.text = self.city
                 }
@@ -114,19 +113,14 @@ class ThisWeekViewController: UIViewController {
         }
 
         group.notify(queue: .global()) { [weak self] in
-            guard let weekWeather = self?.array else {
-                print("예보없음")
-                return }
-            guard let image = self?.imageArray else {
-                print("이미지없음")
-                return }
+            guard let weekWeather = self?.array else { return }
+            guard let image = self?.imageArray else { return }
             self?.convertWeekWeather(array: weekWeather, imageArray: image)
 
             DispatchQueue.main.async {
                 self?.thisWeekTableView.reloadData()
             }
         }
-
     }
 
     func dateFormatter() -> String {
@@ -182,17 +176,17 @@ class ThisWeekViewController: UIViewController {
     func getImage(message: String) -> UIImage? {
         switch message {
         case "맑음":
-            return UIImage(named: "sun")
+            return UIImage.weatherImage.sun
         case "구름많음":
-            return UIImage(named: "cloudcloud")
+            return UIImage.weatherImage.cloudCloud
         case "구름많고 비", "구름많고 비/눈", "구름많고 소나기", "흐리고 비", "흐리고 비/눈", "흐리고 소나기":
-            return UIImage(named: "rain")
+            return UIImage.weatherImage.rain
         case "구름많고 눈", "흐리고 눈":
-            return UIImage(named: "hail")
+            return UIImage.weatherImage.hail
         case "흐림":
-            return UIImage(named: "fog")
+            return UIImage.weatherImage.fog
         default:
-            return UIImage(named: "sun")
+            return UIImage.weatherImage.sun
         }
     }
 }

@@ -12,7 +12,6 @@ class DayAfterTomorrowCollectionViewCell: UICollectionViewCell {
 
     let timeLabel: UILabel = {
         let label = UILabel()
-        label.text = "10:00"
         label.font = UIFont.systemFont(ofSize: 10)
         label.textColor = .white
         return label
@@ -20,13 +19,11 @@ class DayAfterTomorrowCollectionViewCell: UICollectionViewCell {
 
     let weatherImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "think3.001")
         return imageView
     }()
 
     let temperatureLabel: UILabel = {
         let label = UILabel()
-        label.text = "18도"
         label.font = UIFont.systemFont(ofSize: 10)
         label.textColor = .white
         return label

@@ -12,7 +12,6 @@ class WeekWeatherTableViewCell: UITableViewCell {
 
     let dateLabel: UILabel = {
         let label = UILabel()
-        label.text = "11/15(수)"
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .white
         return label
@@ -20,13 +19,11 @@ class WeekWeatherTableViewCell: UITableViewCell {
 
     let weatherImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "sun")
         return imageView
     }()
 
     let tempMinMaxLabel: UILabel = {
         let label = UILabel()
-        label.text = "18도"
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .white
         return label
@@ -34,7 +31,6 @@ class WeekWeatherTableViewCell: UITableViewCell {
 
     let rainLabel: UILabel = {
         let label = UILabel()
-        label.text = "11/15(수)"
         label.font = UIFont.systemFont(ofSize: 14)
         label.textAlignment = .right
         label.textColor = .white

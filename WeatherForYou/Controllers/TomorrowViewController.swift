@@ -21,7 +21,6 @@ class TomorrowViewController: UIViewController {
 
     let locationLabel: UILabel = {
         let label = UILabel()
-        label.text = "서울 관악구"
         label.font = UIFont.systemFont(ofSize: 30)
         label.textColor = .white
         return label
@@ -29,7 +28,6 @@ class TomorrowViewController: UIViewController {
 
     let tomorrowDateLabel: UILabel = {
         let label = UILabel()
-        label.text = "2023년 11월 1일 수요일"
         label.font = UIFont.systemFont(ofSize: 18)
         label.textColor = .white
         return label
@@ -47,7 +45,6 @@ class TomorrowViewController: UIViewController {
 
     let dayAfterTomorrowDateLabel: UILabel = {
         let label = UILabel()
-        label.text = "2023년 11월 1일 수요일"
         label.font = UIFont.systemFont(ofSize: 18)
         label.textColor = .white
         return label
@@ -139,7 +136,7 @@ class TomorrowViewController: UIViewController {
                 DispatchQueue.main.async {
                     self.tomorrowDateLabel.text = date.0
                     self.dayAfterTomorrowDateLabel.text = date.1
-                    let layer = self.setBackground(color1: #colorLiteral(red: 0.6723831892, green: 0.5646241307, blue: 0.7415238023, alpha: 1),color2: #colorLiteral(red: 0.2927551866, green: 0.2779331803, blue: 0.5755700469, alpha: 1))
+                    let layer = self.setBackground(color1: UIColor.weatherTheme.base.0,color2: UIColor.weatherTheme.base.1)
                     self.view.layer.insertSublayer(layer, at: 0)
                     self.locationLabel.text = self.city
                     self.tomorrowCollectionView.reloadData()
@@ -173,25 +170,25 @@ class TomorrowViewController: UIViewController {
     func setImage(iconString: String) -> UIImage? {
         switch iconString {
         case "01n", "01d":
-            return UIImage(named: "sun")
+            return UIImage.weatherImage.sun
         case "02n", "02d":
-            return UIImage(named: "cloudy")
+            return UIImage.weatherImage.cloudy
         case "03n", "03d":
-            return UIImage(named: "cloud")
+            return UIImage.weatherImage.cloud
         case "04n", "04d":
-            return UIImage(named: "cloudcloud")
+            return UIImage.weatherImage.cloudCloud
         case "09n", "09d":
-            return UIImage(named: "rain")
+            return UIImage.weatherImage.rain
         case "10n", "10d":
-            return UIImage(named: "rain")
+            return UIImage.weatherImage.rain
         case "11n", "11d":
-            return UIImage(named: "storm")
+            return UIImage.weatherImage.storm
         case "13n", "13d":
-            return UIImage(named: "hail")
+            return UIImage.weatherImage.hail
         case "50n", "50d":
-            return UIImage(named: "fog")
+            return UIImage.weatherImage.fog
         default:
-            return UIImage(named: "sun")
+            return UIImage.weatherImage.sun
         }
     }
 
@@ -309,7 +306,6 @@ extension TomorrowViewController: CLLocationManagerDelegate {
             if let placemark = placemarks?.first {
                 if let cityName = placemark.locality, let subCityName = placemark.subLocality {
                     self.city = cityName + " " + subCityName
-                    print(self.city)
                 } else {
                     print("도시 이름을 찾을 수 없음")
                 }
