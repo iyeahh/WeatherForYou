@@ -32,9 +32,8 @@ final class NetworkManager {
     }
 
     func fetchWeekWeather(location: String, date: String, completion: @escaping (Result<WeekWeather, NetworkError>) -> Void) {
-        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY_2") as? String else { return }
-        let urlString = "\(NetworkConfig.weekWeatherURL)&regId=\(location)&tmFc=\(date)&serviceKey=\(apiKey)"
-        guard let url = URL(string: urlString) else { return }
+
+        guard let url = makeURL(path: NetworkConfig.URLPath.weekWeather.rawValue, location: location, date: date) else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
 
@@ -42,9 +41,7 @@ final class NetworkManager {
     }
 
     func fetchWeekWeatherImage(location: String, date: String, completion: @escaping (Result<WeekWeatherImage, NetworkError>) -> Void) {
-        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY_2") as? String else { return }
-        let urlString = "\(NetworkConfig.weekWeatherImageURL)&regId=\(location)&tmFc=\(date)&serviceKey=\(apiKey)"
-        guard let url = URL(string: urlString) else { return }
+        guard let url = makeURL(path: NetworkConfig.URLPath.weekWeatherImage.rawValue, location: location, date: date) else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
 
@@ -90,6 +87,24 @@ extension NetworkManager {
         let unitsQuery = URLQueryItem(name: "units", value: "metric")
 
         urlComponents?.queryItems = [latQuery, lonQuery, appIdQuery, langQuery, unitsQuery]
+
+        return urlComponents?.url
+    }
+
+    private func makeURL(path: String, location: String, date: String) -> URL? {
+
+        var urlComponents = URLComponents(string: "\(NetworkConfig.weekWeatherURL)/\(path)")
+
+        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY_2") as? String else { return nil }
+
+        let numOfRowsQuery = URLQueryItem(name: "numOfRows", value: "10")
+        let pageNoQuery = URLQueryItem(name: "pageNo", value: "1")
+        let serviceKeyQuery = URLQueryItem(name: "serviceKey", value: apiKey)
+        let dataTypeQuery = URLQueryItem(name: "dataType", value: "JSON")
+        let regIdQuery = URLQueryItem(name: "regId", value: location)
+        let dateQuery = URLQueryItem(name: "tmFc", value: date)
+
+        urlComponents?.queryItems = [numOfRowsQuery, pageNoQuery, serviceKeyQuery, dataTypeQuery, regIdQuery, dateQuery]
 
         return urlComponents?.url
     }
