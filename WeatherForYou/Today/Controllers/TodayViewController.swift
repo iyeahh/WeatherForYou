@@ -13,6 +13,8 @@ class TodayViewController: UIViewController {
     let networkManager = NetworkManager.shared
     let locationManager = CLLocationManager()
 
+    let screenHeight: CGFloat = UIScreen.main.bounds.height
+
     var city: String = ""
     var weatherList: [WeatherInfo] = []
 
@@ -84,16 +86,16 @@ class TodayViewController: UIViewController {
 
         NSLayoutConstraint.activate([
             dateLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            dateLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
+            dateLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: screenHeight * 0.06),
 
             locationLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            locationLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 40),
+            locationLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: screenHeight * 0.06),
 
             tempRangeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tempRangeLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 3),
 
             weatherImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            weatherImageView.topAnchor.constraint(equalTo: tempRangeLabel.bottomAnchor, constant: 80),
+            weatherImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             weatherImageView.widthAnchor.constraint(equalToConstant: 180),
             weatherImageView.heightAnchor.constraint(equalToConstant: 180),
 
@@ -102,7 +104,7 @@ class TodayViewController: UIViewController {
 
             todayCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             todayCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            todayCollectionView.topAnchor.constraint(equalTo: temperatureLabel.bottomAnchor, constant: 70),
+            todayCollectionView.topAnchor.constraint(equalTo: temperatureLabel.bottomAnchor, constant: screenHeight * 0.06),
             todayCollectionView.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
@@ -135,6 +137,12 @@ class TodayViewController: UIViewController {
                 let image = self.setImage(iconString: (weather.weather?.first?.icon)!)
 
                 DispatchQueue.main.async {
+                    if (weather.weather?.first?.icon)! == "13n" || (weather.weather?.first?.icon)! == "13d" {
+                        self.dateLabel.textColor = .darkGray
+                        self.locationLabel.textColor = .darkGray
+                        self.tempRangeLabel.textColor = .darkGray
+                        self.temperatureLabel.textColor = .darkGray
+                    }
                     self.dateLabel.text = date
                     self.locationLabel.text = self.city
                     self.tempRangeLabel.text = "체감온도: \(Int(roundedFeelsLikeTemp))°C"
@@ -275,6 +283,10 @@ extension TodayViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TodayCollectionViewCell.identifier, for: indexPath) as! TodayCollectionViewCell
+        if dateLabel.textColor == .darkGray {
+            cell.temperatureLabel.textColor = .darkGray
+            cell.timeLabel.textColor = .darkGray
+        }
 
         if let date = weatherList[indexPath.row].dtTxt {
             cell.timeLabel.text = dateFormatter(date: date)
