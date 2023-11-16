@@ -122,12 +122,20 @@ class ThisWeekViewController: UIViewController {
 
     func dateFormatter() -> String {
         let nowDate = Date()
+        var afterHoursDate = Date()
 
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier:"ko_KR")
-        dateFormatter.dateFormat = "yyyyMMdd0600"
+        dateFormatter.dateFormat = "HH"
+        let after6DateFormatter = DateFormatter()
+        after6DateFormatter.dateFormat = "yyyyMMdd0600"
 
-        return dateFormatter.string(from: nowDate)
+        if Int(dateFormatter.string(from: nowDate))! < 06 {
+            guard let date = Calendar.current.date(byAdding: .day, value: -1, to: nowDate) else { return "" }
+            return after6DateFormatter.string(from: date)
+        } else {
+            return after6DateFormatter.string(from: nowDate)
+        }
     }
 
     func dateFormatter(afterHours: Int) -> String {
