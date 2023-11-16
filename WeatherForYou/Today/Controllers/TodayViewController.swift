@@ -134,7 +134,8 @@ class TodayViewController: UIViewController {
                 guard let feelsLikeTemp = weather.main?.feelsLike else { return }
                 let roundedTemp = round(temp)
                 let roundedFeelsLikeTemp = round(feelsLikeTemp)
-                let image = self.setImage(iconString: (weather.weather?.first?.icon)!)
+                guard let image = self.setImage(iconString: (weather.weather?.first?.icon)!) else { return }
+                let shadowImage = self.makeShadow(image: image)
 
                 DispatchQueue.main.async {
                     if (weather.weather?.first?.icon)! == "13n" || (weather.weather?.first?.icon)! == "13d" {
@@ -147,7 +148,7 @@ class TodayViewController: UIViewController {
                     self.locationLabel.text = self.city
                     self.tempRangeLabel.text = "체감온도: \(Int(roundedFeelsLikeTemp))°C"
                     self.temperatureLabel.text = "\(Int(roundedTemp))°C"
-                    self.weatherImageView.image = self.makeShadow(image: image)!
+                    self.weatherImageView.image = shadowImage
                     let (color1, color2) = self.setbackgroundColor(iconString: (weather.weather?.first?.icon)!)
                     let layer = self.setBackground(color1: color1, color2: color2)
                     self.view.layer.insertSublayer(layer, at: 0)
@@ -202,9 +203,7 @@ class TodayViewController: UIViewController {
             return UIImage.weatherImage.cloud
         case "04n", "04d":
             return UIImage.weatherImage.cloudCloud
-        case "09n", "09d":
-            return UIImage.weatherImage.rain
-        case "10n", "10d":
+        case "09n", "09d", "10n", "10d":
             return UIImage.weatherImage.rain
         case "11n", "11d":
             return UIImage.weatherImage.storm
@@ -219,18 +218,12 @@ class TodayViewController: UIViewController {
 
     func setbackgroundColor(iconString: String) -> (UIColor, UIColor) {
         switch iconString {
-        case "01n", "01d":
-            return UIColor.weatherTheme.sun
-        case "02n", "02d":
+        case "01n", "01d", "02n", "02d":
             return UIColor.weatherTheme.sun
         case "03n", "03d", "04n", "04d", "50n", "50d":
             return UIColor.weatherTheme.cloud
-        case "09n", "09d":
+        case "09n", "09d", "10n", "10d", "11n", "11d":
             return UIColor.weatherTheme.rain
-        case "10n", "10d":
-            return UIColor.weatherTheme.rain
-        case "11n", "11d":
-            return UIColor.weatherTheme.snow
         case "13n", "13d":
             return UIColor.weatherTheme.snow
         default:
@@ -246,7 +239,7 @@ class TodayViewController: UIViewController {
 
         if let context = UIGraphicsGetCurrentContext() {
             let shadowOffset = CGSize(width: 5, height: 5)
-            let shadowBlur: CGFloat = 40.0
+            let shadowBlur: CGFloat = 20.0
             let shadowColor = UIColor.black.cgColor
 
             context.setShadow(offset: shadowOffset, blur: shadowBlur, color: shadowColor)
