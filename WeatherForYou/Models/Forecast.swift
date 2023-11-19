@@ -8,53 +8,27 @@
 import Foundation
 
 
-// MARK: - Forecast
 struct Forecast: Codable {
-    let cod: String?
-    let message: Int?
-    let cnt: Int?      // 몇개의 데이터 인지
     let weatherInfoList: [WeatherInfo]?
-    let city: ForecastCity?    // 도시
 
     enum CodingKeys: String, CodingKey {
-        case cod, message, cnt, city
         case weatherInfoList = "list"
     }
 }
 
-// MARK: - City
-struct ForecastCity: Codable {
-    let id: Int?
-    let name: String?
-    let coord: ForecastCoord?
-    let country: String?
-    let population, timezone, sunrise, sunset: Int?
-}
-
-// MARK: - Coord
-struct ForecastCoord: Codable {
-    let lat, lon: Double?
-}
-
-// MARK: - List
 struct WeatherInfo: Codable {
-    let dt: Int?         // UTC기준 날씨 예상 시간
-    let mainInfo: MainInfo?   // 주요 날씨 정보
+    let tempInfo: TempInfo?   // 주요 날씨 정보
     let weather: [ForecastWeather]?          // 날씨 상태 정보
-    let visibility: Int?
-    let pop: Double?
-    let rain: ForecastRain?
-    let dtTxt: String?
+    let dateText: String?
 
     enum CodingKeys: String, CodingKey {
-        case dt, weather, visibility, pop, rain
-        case mainInfo = "main"
-        case dtTxt = "dt_txt"
+        case weather
+        case tempInfo = "main"
+        case dateText = "dt_txt"
     }
 }
 
-// MARK: - Main
-struct MainInfo: Codable {
+struct TempInfo: Codable {
     let temp: Double?       // current temperature
     let feelsLike: Double?   // 체감온도
     let tempMin: Double?     // 최저
@@ -68,19 +42,7 @@ struct MainInfo: Codable {
     }
 }
 
-// MARK: - Rain
-struct ForecastRain: Codable {
-    let the3H: Double?   // 3 시간 기준 강수량
-
-    enum CodingKeys: String, CodingKey {
-        case the3H = "3h"
-    }
-}
-
-// MARK: - Weather
 struct ForecastWeather: Codable {
-    let id: Int?      // 날씨 상태 아이디
-    let main: String?     // Rain, Snow, Clouds
     let icon: String?     // 날씨 아이콘
 }
 

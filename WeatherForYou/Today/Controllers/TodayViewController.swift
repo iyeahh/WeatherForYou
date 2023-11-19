@@ -130,8 +130,8 @@ class TodayViewController: UIViewController {
 
             switch result {
             case .success(let weather):
-                guard let temp = weather.main?.temp else { return }
-                guard let feelsLikeTemp = weather.main?.feelsLike else { return }
+                guard let temp = weather.temp?.temp else { return }
+                guard let feelsLikeTemp = weather.temp?.feelsLike else { return }
                 let roundedTemp = round(temp)
                 let roundedFeelsLikeTemp = round(feelsLikeTemp)
                 guard let image = self.setImage(iconString: (weather.weather?.first?.icon)!) else { return }
@@ -281,11 +281,11 @@ extension TodayViewController: UICollectionViewDataSource {
             cell.timeLabel.textColor = .darkGray
         }
 
-        if let date = weatherList[indexPath.row].dtTxt {
+        if let date = weatherList[indexPath.row].dateText {
             cell.timeLabel.text = dateFormatter(date: date)
         }
 
-        if let temp = weatherList[indexPath.row].mainInfo?.temp {
+        if let temp = weatherList[indexPath.row].tempInfo?.temp {
             let roundedTemp = round(temp)
             cell.temperatureLabel.text = "\(Int(roundedTemp))°C"
         }

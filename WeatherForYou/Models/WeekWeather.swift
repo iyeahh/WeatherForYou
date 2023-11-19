@@ -7,34 +7,60 @@
 
 import Foundation
 
-// MARK: - WeekWeather
 struct WeekWeather: Codable {
     let response: Response?
 }
 
-// MARK: - Response
 struct Response: Codable {
-    let body: Body?
+    let weekWeatherResponse: WeekWeatherResponse?
+
+    enum CodingKeys: String, CodingKey {
+        case weekWeatherResponse = "body"
+    }
 }
 
-// MARK: - Body
-struct Body: Codable {
-    let items: Items?
+struct WeekWeatherResponse: Codable {
+    let weekWeatherItems: WeekWeatherItem?
+
+    enum CodingKeys: String, CodingKey {
+        case weekWeatherItems = "items"
+    }
 }
 
-// MARK: - Items
-struct Items: Codable {
-    let item: [Item]?
+struct WeekWeatherItem: Codable {
+    let weekWeatherTempList: [WeekWeatherTemp]?
+
+    enum CodingKeys: String, CodingKey {
+        case weekWeatherTempList = "item"
+    }
 }
 
-// MARK: - Item
-struct Item: Codable {
-    let taMin3, taMax3: Int?
-    let taMin4, taMax4: Int?
-    let taMin5, taMax5: Int?
-    let taMin6, taMax6: Int?
-    let taMin7, taMax7: Int?
-    let taMin8, taMax8: Int?
-    let taMin9, taMax9: Int?
-    let taMin10, taMax10: Int?
+struct WeekWeatherTemp: Codable {
+    let later3DaysMinTemp, later3DaysMaxTemp: Int?
+    let later4DaysMinTemp, later4DaysMaxTemp: Int?
+    let later5DaysMinTemp, later5DaysMaxTemp: Int?
+    let later6DaysMinTemp, later6DaysMaxTemp: Int?
+    let later7DaysMinTemp, later7DaysMaxTemp: Int?
+    let later8DaysMinTemp, later8DaysMaxTemp: Int?
+    let later9DaysMinTemp, later9DaysMaxTemp: Int?
+    let later10DaysMinTemp, later10DaysMaxTemp: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case later3DaysMinTemp = "taMin3"
+        case later3DaysMaxTemp = "taMax3"
+        case later4DaysMinTemp = "taMin4"
+        case later4DaysMaxTemp = "taMax4"
+        case later5DaysMinTemp = "taMin5"
+        case later5DaysMaxTemp = "taMax5"
+        case later6DaysMinTemp = "taMin6"
+        case later6DaysMaxTemp = "taMax6"
+        case later7DaysMinTemp = "taMin7"
+        case later7DaysMaxTemp = "taMax7"
+        case later8DaysMinTemp = "taMin8"
+        case later8DaysMaxTemp = "taMax8"
+        case later9DaysMinTemp = "taMin9"
+        case later9DaysMaxTemp = "taMaX9"
+        case later10DaysMinTemp = "taMin10"
+        case later10DaysMaxTemp = "taMax10"
+    }
 }

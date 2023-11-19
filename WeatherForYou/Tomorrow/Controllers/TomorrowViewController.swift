@@ -230,11 +230,11 @@ extension TomorrowViewController: UICollectionViewDataSource {
         if collectionView == tomorrowCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TomorrowCollectionViewCell.identifier, for: indexPath) as! TomorrowCollectionViewCell
 
-            if let date = tomorrowWeatherList[indexPath.row].dtTxt {
+            if let date = tomorrowWeatherList[indexPath.row].dateText {
                 cell.timeLabel.text = dateFormatter(date: date)
             }
 
-            if let temp = tomorrowWeatherList[indexPath.row].mainInfo?.temp {
+            if let temp = tomorrowWeatherList[indexPath.row].tempInfo?.temp {
                 let roundedTemp = round(temp)
                 cell.temperatureLabel.text = "\(Int(roundedTemp))°C"
             }
@@ -246,11 +246,11 @@ extension TomorrowViewController: UICollectionViewDataSource {
         } else if collectionView == dayAfterTomorrowCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayAfterTomorrowCollectionViewCell.identifier, for: indexPath) as! DayAfterTomorrowCollectionViewCell
 
-            if let date = datAfterTomorrowWeatherList[indexPath.row].dtTxt {
+            if let date = datAfterTomorrowWeatherList[indexPath.row].dateText {
                 cell.timeLabel.text = dateFormatter(date: date)
             }
 
-            if let temp = datAfterTomorrowWeatherList[indexPath.row].mainInfo?.temp {
+            if let temp = datAfterTomorrowWeatherList[indexPath.row].tempInfo?.temp {
                 let roundedTemp = round(temp)
                 cell.temperatureLabel.text = "\(Int(roundedTemp))°C"
             }

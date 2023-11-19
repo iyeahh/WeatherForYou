@@ -7,40 +7,62 @@
 
 import Foundation
 
-// MARK: - WeekWeatherImage
 struct WeekWeatherImage: Codable {
     let response: ImageResponse?
 }
 
-// MARK: - Response
 struct ImageResponse: Codable {
-    let body: ImageBody?
-}
-
-// MARK: - Body
-struct ImageBody: Codable {
-    let items: ImageItems?
-}
-
-// MARK: - Items
-struct ImageItems: Codable {
-    let item: [ImageItem]?
-}
-
-// MARK: - Item
-struct ImageItem: Codable {
-    let regID: String?
-    let rnSt3Am, rnSt3Pm, rnSt4Am, rnSt4Pm: Int?
-    let rnSt5Am, rnSt5Pm, rnSt6Am, rnSt6Pm: Int?
-    let rnSt7Am, rnSt7Pm, rnSt8, rnSt9: Int?
-    let rnSt10: Int?
-    let wf3Am, wf3Pm, wf4Am, wf4Pm: String?
-    let wf5Am, wf5Pm, wf6Am, wf6Pm: String?
-    let wf7Am, wf7Pm, wf8, wf9: String?
-    let wf10: String?
+    let weekWeatherImageResponse: WeekWeatherImageResponse?
 
     enum CodingKeys: String, CodingKey {
-        case regID = "regId"
-        case rnSt3Am, rnSt3Pm, rnSt4Am, rnSt4Pm, rnSt5Am, rnSt5Pm, rnSt6Am, rnSt6Pm, rnSt7Am, rnSt7Pm, rnSt8, rnSt9, rnSt10, wf3Am, wf3Pm, wf4Am, wf4Pm, wf5Am, wf5Pm, wf6Am, wf6Pm, wf7Am, wf7Pm, wf8, wf9, wf10
+        case weekWeatherImageResponse = "body"
+    }
+}
+
+struct WeekWeatherImageResponse: Codable {
+    let weekWeatherImageItems: WeekWeatherImageItems?
+
+    enum CodingKeys: String, CodingKey {
+        case weekWeatherImageItems = "items"
+    }
+}
+
+struct WeekWeatherImageItems: Codable {
+    let weekWeatherRainAndImageList: [WeekWeatherRainAndImage]?
+
+    enum CodingKeys: String, CodingKey {
+        case weekWeatherRainAndImageList = "item"
+    }
+}
+
+struct WeekWeatherRainAndImage: Codable {
+    let later3DaysRain, later4DaysRain: Int?
+    let later5DaysRain, later6DaysRain: Int?
+    let later7DaysRain, later8DaysRain: Int?
+    let later9DaysRain, later10DaysRain: Int?
+    
+    let later3DaysWeather, later4DaysWeather: String?
+    let later5DaysWeather, later6DaysWeather: String?
+    let later7DaysWeather, later8DaysWeather: String?
+    let later9DaysWeather, later10DaysWeather: String?
+
+    enum CodingKeys: String, CodingKey {
+        case later3DaysRain = "rnSt3Am"
+        case later4DaysRain = "rnSt4Am"
+        case later5DaysRain = "rnSt5Am"
+        case later6DaysRain = "rnSt6Am"
+        case later7DaysRain = "rnSt7Am"
+        case later8DaysRain = "rnSt8"
+        case later9DaysRain = "rnSt9"
+        case later10DaysRain = "rnSt10"
+
+        case later3DaysWeather = "wf3Am"
+        case later4DaysWeather = "wf4Am"
+        case later5DaysWeather = "wf5Am"
+        case later6DaysWeather = "wf6Am"
+        case later7DaysWeather = "wf7Am"
+        case later8DaysWeather = "wf8"
+        case later9DaysWeather = "wf9"
+        case later10DaysWeather = "wf10"
     }
 }
