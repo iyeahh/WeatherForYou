@@ -13,7 +13,7 @@ final class NetworkManager {
 
     private init() {}
 
-    func fetchWeather(lat: String, lon: String, completion: @escaping (Result<CurrentWeather, NetworkError>) -> Void) {
+    func fetchCurrentWeather(lat: String, lon: String, completion: @escaping (Result<CurrentWeather, NetworkError>) -> Void) {
 
         guard let url = makeURL(path: NetworkConfig.URLPath.weather.rawValue, lat: lat, lon: lon) else { return }
         var request = URLRequest(url: url)
@@ -22,7 +22,7 @@ final class NetworkManager {
         performRequest(request: request, completion: completion)
     }
 
-    func fetchForecast(lat: String, lon: String, completion: @escaping (Result<Forecast, NetworkError>) -> Void) {
+    func fetch3DaysForecast(lat: String, lon: String, completion: @escaping (Result<Forecast, NetworkError>) -> Void) {
 
         guard let url = makeURL(path: NetworkConfig.URLPath.forecast.rawValue, lat: lat, lon: lon) else { return }
         var request = URLRequest(url: url)
@@ -40,7 +40,7 @@ final class NetworkManager {
         performRequest(request: request, completion: completion)
     }
 
-    func fetchWeekWeatherImage(location: String, date: String, completion: @escaping (Result<WeekWeatherImage, NetworkError>) -> Void) {
+    func fetchWeekWeatherImageAndRain(location: String, date: String, completion: @escaping (Result<WeekWeatherImage, NetworkError>) -> Void) {
         guard let url = makeURL(path: NetworkConfig.URLPath.weekWeatherImage.rawValue, location: location, date: date) else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"

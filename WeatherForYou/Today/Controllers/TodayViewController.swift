@@ -125,7 +125,7 @@ class TodayViewController: UIViewController {
     }
 
     func fetchWeatherDataWith(lat: String, lon: String) {
-        networkManager.fetchWeather(lat: lat, lon: lon) { result in
+        networkManager.fetchCurrentWeather(lat: lat, lon: lon) { result in
             let date = Date.currentDateToString()
 
             switch result {
@@ -159,7 +159,7 @@ class TodayViewController: UIViewController {
             }
         }
 
-        networkManager.fetchForecast(lat: lat, lon: lon) { result in
+        networkManager.fetch3DaysForecast(lat: lat, lon: lon) { result in
             switch result {
             case .success(let forecast):
                 self.weatherList = Array((forecast.weatherInfoList?.prefix(10))!)

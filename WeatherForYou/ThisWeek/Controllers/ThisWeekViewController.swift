@@ -97,7 +97,7 @@ class ThisWeekViewController: UIViewController {
         }
 
         group.enter()
-        networkManager.fetchWeekWeatherImage(location: imageRegionCode, date: date) { result in
+        networkManager.fetchWeekWeatherImageAndRain(location: imageRegionCode, date: date) { result in
             switch result {
             case .success(let weekWeatherImage):
                 guard let item = weekWeatherImage.response?.weekWeatherImageResponse?.weekWeatherImageItems?.weekWeatherRainAndImageList?.first else { return }

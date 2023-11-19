@@ -125,7 +125,7 @@ class TomorrowViewController: UIViewController {
     }
 
     func fetchWeatherDataWith(lat: String, lon: String) {
-        networkManager.fetchForecast(lat: lat, lon: lon) { result in
+        networkManager.fetch3DaysForecast(lat: lat, lon: lon) { result in
 
             switch result {
             case .success(let forecast):
