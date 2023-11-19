@@ -78,7 +78,7 @@ class ThisWeekViewController: UIViewController {
     }
 
     func fetchWeekWeatherDataWith(regionCode: String, imageRegionCode: String) {
-        let date = currentDataForWeek()
+        let date = Date.currentDataForWeek()
         group.enter()
         networkManager.fetchWeekWeather(location: regionCode, date: date) { result in
             switch result {
@@ -119,40 +119,6 @@ class ThisWeekViewController: UIViewController {
             }
         }
     }
-
-    func currentDataForWeek() -> String {
-        let nowDate = Date()
-        var afterHoursDate = Date()
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier:"ko_KR")
-        dateFormatter.dateFormat = "HH"
-        let after6DateFormatter = DateFormatter()
-        after6DateFormatter.dateFormat = "yyyyMMdd0600"
-
-        if Int(dateFormatter.string(from: nowDate))! < 06 {
-            guard let date = Calendar.current.date(byAdding: .day, value: -1, to: nowDate) else { return "" }
-            return after6DateFormatter.string(from: date)
-        } else {
-            return after6DateFormatter.string(from: nowDate)
-        }
-    }
-
-    func dateFormatterForWeek(afterHours: Int) -> String {
-        let nowDate = Date()
-        var afterHoursDate = Date()
-
-        if let date = Calendar.current.date(byAdding: .hour, value: afterHours, to: nowDate) {
-            afterHoursDate = date
-        }
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier:"ko_KR")
-        dateFormatter.dateFormat = "MM/dd(EEE)"
-
-        return dateFormatter.string(from: afterHoursDate)
-    }
-
 
     func setBackground(color1: UIColor, color2: UIColor) -> CAGradientLayer {
         let gradientLayer = CAGradientLayer()
@@ -274,7 +240,7 @@ extension ThisWeekViewController: UITableViewDataSource {
               let tempImage = weekWeather.tempImage,
               let rain = weekWeather.rain else { return cell }
 
-        cell.dateLabel.text = dateFormatterForWeek(afterHours: afterHours)
+        cell.dateLabel.text = Date.dateFormatterForWeek(afterHours: afterHours)
         cell.weatherImageView.image = tempImage
         cell.tempMinMaxLabel.text = "\(tempMax)°C / \(tempMin)°C"
         cell.rainLabel.text = "\(rain)%"

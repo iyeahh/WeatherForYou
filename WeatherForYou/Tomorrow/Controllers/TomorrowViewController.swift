@@ -129,7 +129,7 @@ class TomorrowViewController: UIViewController {
 
             switch result {
             case .success(let forecast):
-                let date = self.tomorrowAndNextDayToString()
+                let date = Date.tomorrowAndNextDayToString()
                 self.tomorrowWeatherList = Array((forecast.weatherInfoList?[6..<14])!)
                 self.datAfterTomorrowWeatherList = Array((forecast.weatherInfoList?[14..<22])!)
 
@@ -146,36 +146,6 @@ class TomorrowViewController: UIViewController {
                 print(error.localizedDescription)
             }
         }
-    }
-
-    func tomorrowAndNextDayToString() -> (String, String) {
-        let nowDate = Date()
-        var tomorrowDate = Date()
-        var afterDayTomorrowDate = Date()
-
-        if let nextDay = Calendar.current.date(byAdding: .hour, value: 24, to: nowDate) {
-            tomorrowDate = nextDay
-        }
-        if let dayAfterTomorrow = Calendar.current.date(byAdding: .hour, value: 48, to: nowDate) {
-            afterDayTomorrowDate = dayAfterTomorrow
-        }
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier:"ko_KR")
-        dateFormatter.dateFormat = "yyyy년 MM월 dd일 EEEE"
-
-        return (dateFormatter.string(from: tomorrowDate), dateFormatter.string(from: afterDayTomorrowDate))
-    }
-
-    func dateToHours(date: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS"
-        let convertDate = dateFormatter.date(from: date)
-
-        let myDateFormatter = DateFormatter()
-        myDateFormatter.dateFormat = "HH시"
-
-        return myDateFormatter.string(from: convertDate!)
     }
 
     func setImage(iconString: String) -> UIImage? {
@@ -231,7 +201,7 @@ extension TomorrowViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TomorrowCollectionViewCell.identifier, for: indexPath) as! TomorrowCollectionViewCell
 
             if let date = tomorrowWeatherList[indexPath.row].dateText {
-                cell.timeLabel.text = dateToHours(date: date)
+                cell.timeLabel.text = Date.dateToHours(date: date)
             }
 
             if let temp = tomorrowWeatherList[indexPath.row].tempInfo?.temp {
@@ -247,7 +217,7 @@ extension TomorrowViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayAfterTomorrowCollectionViewCell.identifier, for: indexPath) as! DayAfterTomorrowCollectionViewCell
 
             if let date = datAfterTomorrowWeatherList[indexPath.row].dateText {
-                cell.timeLabel.text = dateToHours(date: date)
+                cell.timeLabel.text = Date.dateToHours(date: date)
             }
 
             if let temp = datAfterTomorrowWeatherList[indexPath.row].tempInfo?.temp {

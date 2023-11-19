@@ -126,7 +126,7 @@ class TodayViewController: UIViewController {
 
     func fetchWeatherDataWith(lat: String, lon: String) {
         networkManager.fetchWeather(lat: lat, lon: lon) { result in
-            let date = self.currentDateToString()
+            let date = Date.currentDateToString()
 
             switch result {
             case .success(let weather):
@@ -135,7 +135,7 @@ class TodayViewController: UIViewController {
                 let roundedTemp = round(temp)
                 let roundedFeelsLikeTemp = round(feelsLikeTemp)
                 guard let image = self.setImage(iconString: (weather.weather?.first?.icon)!) else { return }
-                let shadowImage = self.makeShadow(image: image)
+                let shadowImage = image.makeShadow()
 
                 DispatchQueue.main.async {
                     if (weather.weather?.first?.icon)! == "13n" || (weather.weather?.first?.icon)! == "13d" {
@@ -170,27 +170,6 @@ class TodayViewController: UIViewController {
                 print(error.localizedDescription)
             }
         }
-    }
-
-    func currentDateToString() -> String {
-        let nowDate = Date()
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier:"ko_KR")
-        dateFormatter.dateFormat = "yyyy년 MM월 dd일 EEEE"
-
-        return dateFormatter.string(from: nowDate)
-    }
-
-    func dateToHours(date: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS"
-        let convertDate = dateFormatter.date(from: date)
-
-        let myDateFormatter = DateFormatter()
-        myDateFormatter.dateFormat = "HH시"
-
-        return myDateFormatter.string(from: convertDate!)
     }
 
     func setImage(iconString: String) -> UIImage? {
@@ -231,32 +210,6 @@ class TodayViewController: UIViewController {
         }
     }
 
-    func makeShadow(image: UIImage?) -> UIImage? {
-
-        guard let originalImage = image else { return nil }
-
-        UIGraphicsBeginImageContextWithOptions(originalImage.size, false, 0.0)
-
-        if let context = UIGraphicsGetCurrentContext() {
-            let shadowOffset = CGSize(width: 5, height: 5)
-            let shadowBlur: CGFloat = 20.0
-            let shadowColor = UIColor.black.cgColor
-
-            context.setShadow(offset: shadowOffset, blur: shadowBlur, color: shadowColor)
-
-            originalImage.draw(at: .zero)
-
-            let imageWithShadow = UIGraphicsGetImageFromCurrentImageContext()
-
-            UIGraphicsEndImageContext()
-
-            if let imageWithShadow = imageWithShadow {
-                return imageWithShadow
-            }
-        }
-        return nil
-    }
-
     func setBackground(color1: UIColor, color2: UIColor) -> CAGradientLayer {
         let gradientLayer = CAGradientLayer()
 
@@ -282,7 +235,7 @@ extension TodayViewController: UICollectionViewDataSource {
         }
 
         if let date = weatherList[indexPath.row].dateText {
-            cell.timeLabel.text = dateToHours(date: date)
+            cell.timeLabel.text = Date.dateToHours(date: date)
         }
 
         if let temp = weatherList[indexPath.row].tempInfo?.temp {
