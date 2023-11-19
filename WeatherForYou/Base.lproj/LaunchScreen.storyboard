@@ -20,6 +20,9 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kty-QE-xK0">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch" translatesAutoresizingMaskIntoConstraints="NO" id="Z1E-vZ-PPt">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                    </imageView>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Image" translatesAutoresizingMaskIntoConstraints="NO" id="2Dv-aH-9w1">
                                         <rect key="frame" x="96.666666666666686" y="326" width="200" height="200"/>
                                         <constraints>
@@ -40,11 +43,15 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.57254904510000004" green="0.50980395079999996" blue="0.96862745289999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="Z1E-vZ-PPt" firstAttribute="top" secondItem="kty-QE-xK0" secondAttribute="top" id="2iU-OB-OS4"/>
                                     <constraint firstItem="Dbn-nG-JP1" firstAttribute="leading" secondItem="kty-QE-xK0" secondAttribute="leading" constant="10" id="3MH-xO-4Cp"/>
+                                    <constraint firstItem="Z1E-vZ-PPt" firstAttribute="leading" secondItem="kty-QE-xK0" secondAttribute="leading" id="59K-My-Iy2"/>
                                     <constraint firstItem="2Dv-aH-9w1" firstAttribute="top" secondItem="aGz-dn-lfd" secondAttribute="bottom" constant="20" id="KQw-qg-iGf"/>
                                     <constraint firstItem="2Dv-aH-9w1" firstAttribute="centerX" secondItem="kty-QE-xK0" secondAttribute="centerX" id="Rtp-EQ-0zN"/>
+                                    <constraint firstAttribute="bottom" secondItem="Z1E-vZ-PPt" secondAttribute="bottom" id="UDx-yk-CRz"/>
+                                    <constraint firstAttribute="trailing" secondItem="Z1E-vZ-PPt" secondAttribute="trailing" id="VWq-eE-qVG"/>
                                     <constraint firstItem="aGz-dn-lfd" firstAttribute="leading" secondItem="kty-QE-xK0" secondAttribute="leading" constant="10" id="WNE-gX-TMU"/>
                                     <constraint firstAttribute="trailing" secondItem="Dbn-nG-JP1" secondAttribute="trailing" constant="10" id="gYz-87-iDR"/>
                                     <constraint firstItem="2Dv-aH-9w1" firstAttribute="centerY" secondItem="kty-QE-xK0" secondAttribute="centerY" id="hCB-Yf-MnT"/>
@@ -70,6 +77,7 @@
     </scenes>
     <resources>
         <image name="Image" width="256" height="256"/>
+        <image name="launch" width="215" height="466"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
