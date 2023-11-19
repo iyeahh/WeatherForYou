@@ -124,9 +124,9 @@ class TodayViewController: UIViewController {
         locationManager.startUpdatingLocation()
     }
 
-    func start(x: String, y: String) {
-        networkManager.fetchWeather(lat: x, lon: y) { result in
-            let date = self.dateFormatter()
+    func fetchWeatherDataWith(lat: String, lon: String) {
+        networkManager.fetchWeather(lat: lat, lon: lon) { result in
+            let date = self.currentDateToString()
 
             switch result {
             case .success(let weather):
@@ -159,7 +159,7 @@ class TodayViewController: UIViewController {
             }
         }
 
-        networkManager.fetchForecast(lat: x, lon: y) { result in
+        networkManager.fetchForecast(lat: lat, lon: lon) { result in
             switch result {
             case .success(let forecast):
                 self.weatherList = Array((forecast.weatherInfoList?.prefix(10))!)
@@ -172,7 +172,7 @@ class TodayViewController: UIViewController {
         }
     }
 
-    func dateFormatter() -> String {
+    func currentDateToString() -> String {
         let nowDate = Date()
 
         let dateFormatter = DateFormatter()
@@ -182,7 +182,7 @@ class TodayViewController: UIViewController {
         return dateFormatter.string(from: nowDate)
     }
 
-    func dateFormatter(date: String) -> String {
+    func dateToHours(date: String) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS"
         let convertDate = dateFormatter.date(from: date)
@@ -282,7 +282,7 @@ extension TodayViewController: UICollectionViewDataSource {
         }
 
         if let date = weatherList[indexPath.row].dateText {
-            cell.timeLabel.text = dateFormatter(date: date)
+            cell.timeLabel.text = dateToHours(date: date)
         }
 
         if let temp = weatherList[indexPath.row].tempInfo?.temp {
@@ -316,7 +316,7 @@ extension TodayViewController: CLLocationManagerDelegate {
         let strLat = String(latitude)
         let strLon = String(longitude)
 
-        start(x: strLat, y: strLon)
+        fetchWeatherDataWith(lat: strLat, lon: strLon)
     }
 
     func getCityNameFromCoordinates(latitude: Double, longitude: Double) {

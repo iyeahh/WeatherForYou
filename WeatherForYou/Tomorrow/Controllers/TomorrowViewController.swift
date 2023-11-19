@@ -124,12 +124,12 @@ class TomorrowViewController: UIViewController {
         locationManager.startUpdatingLocation()
     }
 
-    func start(x: String, y: String) {
-        networkManager.fetchForecast(lat: x, lon: y) { result in
+    func fetchWeatherDataWith(lat: String, lon: String) {
+        networkManager.fetchForecast(lat: lat, lon: lon) { result in
 
             switch result {
             case .success(let forecast):
-                let date = self.dateFormatter()
+                let date = self.tomorrowAndNextDayToString()
                 self.tomorrowWeatherList = Array((forecast.weatherInfoList?[6..<14])!)
                 self.datAfterTomorrowWeatherList = Array((forecast.weatherInfoList?[14..<22])!)
 
@@ -148,7 +148,7 @@ class TomorrowViewController: UIViewController {
         }
     }
 
-    func dateFormatter() -> (String, String) {
+    func tomorrowAndNextDayToString() -> (String, String) {
         let nowDate = Date()
         var tomorrowDate = Date()
         var afterDayTomorrowDate = Date()
@@ -167,7 +167,7 @@ class TomorrowViewController: UIViewController {
         return (dateFormatter.string(from: tomorrowDate), dateFormatter.string(from: afterDayTomorrowDate))
     }
 
-    func dateFormatter(date: String) -> String {
+    func dateToHours(date: String) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS"
         let convertDate = dateFormatter.date(from: date)
@@ -231,7 +231,7 @@ extension TomorrowViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TomorrowCollectionViewCell.identifier, for: indexPath) as! TomorrowCollectionViewCell
 
             if let date = tomorrowWeatherList[indexPath.row].dateText {
-                cell.timeLabel.text = dateFormatter(date: date)
+                cell.timeLabel.text = dateToHours(date: date)
             }
 
             if let temp = tomorrowWeatherList[indexPath.row].tempInfo?.temp {
@@ -247,7 +247,7 @@ extension TomorrowViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayAfterTomorrowCollectionViewCell.identifier, for: indexPath) as! DayAfterTomorrowCollectionViewCell
 
             if let date = datAfterTomorrowWeatherList[indexPath.row].dateText {
-                cell.timeLabel.text = dateFormatter(date: date)
+                cell.timeLabel.text = dateToHours(date: date)
             }
 
             if let temp = datAfterTomorrowWeatherList[indexPath.row].tempInfo?.temp {
@@ -283,7 +283,7 @@ extension TomorrowViewController: CLLocationManagerDelegate {
         let strLat = String(latitude)
         let strLon = String(longitude)
 
-        start(x: strLat, y: strLon)
+        fetchWeatherDataWith(lat: strLat, lon: strLon)
     }
 
     func getCityNameFromCoordinates(latitude: Double, longitude: Double) {

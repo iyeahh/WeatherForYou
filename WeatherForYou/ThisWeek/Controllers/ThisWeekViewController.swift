@@ -14,8 +14,8 @@ class ThisWeekViewController: UIViewController {
     let locationManager = CLLocationManager()
 
     var city: String = ""
-    var array: WeekWeatherTemp?
-    var imageArray: WeekWeatherRainAndImage?
+    var weekWeatherTemp: WeekWeatherTemp?
+    var weekWeatherRainAndImage: WeekWeatherRainAndImage?
     var weekWeatherArray: [WeekWeatherEntity] = []
 
     let group = DispatchGroup()
@@ -77,14 +77,14 @@ class ThisWeekViewController: UIViewController {
         locationManager.startUpdatingLocation()
     }
 
-    func start(regionCode: String, imageRegionCode: String) {
-        let date = dateFormatter()
+    func fetchWeekWeatherDataWith(regionCode: String, imageRegionCode: String) {
+        let date = currentDataForWeek()
         group.enter()
         networkManager.fetchWeekWeather(location: regionCode, date: date) { result in
             switch result {
             case .success(let weekWeather):
                 guard let item = weekWeather.response?.weekWeatherResponse?.weekWeatherItems?.weekWeatherTempList?.first else { return }
-                self.array = item
+                self.weekWeatherTemp = item
                 self.group.leave()
                 DispatchQueue.main.async {
                     let layer = self.setBackground(color1: UIColor.weatherTheme.baseReversed.0 ,color2: UIColor.weatherTheme.baseReversed.1)
@@ -101,7 +101,7 @@ class ThisWeekViewController: UIViewController {
             switch result {
             case .success(let weekWeatherImage):
                 guard let item = weekWeatherImage.response?.weekWeatherImageResponse?.weekWeatherImageItems?.weekWeatherRainAndImageList?.first else { return }
-                self.imageArray = item
+                self.weekWeatherRainAndImage = item
                 self.group.leave()
 
             case .failure(let error):
@@ -110,9 +110,9 @@ class ThisWeekViewController: UIViewController {
         }
 
         group.notify(queue: .global()) { [weak self] in
-            guard let weekWeather = self?.array else { return }
-            guard let image = self?.imageArray else { return }
-            self?.convertWeekWeather(array: weekWeather, imageArray: image)
+            guard let weekWeather = self?.weekWeatherTemp else { return }
+            guard let image = self?.weekWeatherRainAndImage else { return }
+            self?.convertWeekWeather(temp: weekWeather, weatherAndRain: image)
 
             DispatchQueue.main.async {
                 self?.thisWeekTableView.reloadData()
@@ -120,7 +120,7 @@ class ThisWeekViewController: UIViewController {
         }
     }
 
-    func dateFormatter() -> String {
+    func currentDataForWeek() -> String {
         let nowDate = Date()
         var afterHoursDate = Date()
 
@@ -138,7 +138,7 @@ class ThisWeekViewController: UIViewController {
         }
     }
 
-    func dateFormatter(afterHours: Int) -> String {
+    func dateFormatterForWeek(afterHours: Int) -> String {
         let nowDate = Date()
         var afterHoursDate = Date()
 
@@ -165,15 +165,15 @@ class ThisWeekViewController: UIViewController {
         return gradientLayer
     }
 
-    func convertWeekWeather(array: WeekWeatherTemp, imageArray: WeekWeatherRainAndImage) {
-        let third = WeekWeatherEntity(afterHours: 72, tempImage: getImage(message: imageArray.later3DaysWeather!), tempMax: array.later3DaysMaxTemp, tempMin: array.later3DaysMinTemp, rain: imageArray.later3DaysRain)
-        let fourth = WeekWeatherEntity(afterHours: 96, tempImage: getImage(message: imageArray.later4DaysWeather!), tempMax: array.later4DaysMaxTemp, tempMin: array.later4DaysMinTemp, rain: imageArray.later4DaysRain)
-        let fifth = WeekWeatherEntity(afterHours: 120, tempImage: getImage(message: imageArray.later5DaysWeather!), tempMax: array.later5DaysMaxTemp, tempMin: array.later5DaysMinTemp, rain: imageArray.later5DaysRain)
-        let sixth = WeekWeatherEntity(afterHours: 144, tempImage: getImage(message: imageArray.later6DaysWeather!), tempMax: array.later6DaysMaxTemp, tempMin: array.later6DaysMinTemp, rain: imageArray.later6DaysRain)
-        let seventh = WeekWeatherEntity(afterHours: 168, tempImage: getImage(message: imageArray.later7DaysWeather!), tempMax: array.later7DaysMaxTemp, tempMin: array.later7DaysMinTemp, rain: imageArray.later7DaysRain)
-        let eighth = WeekWeatherEntity(afterHours: 192, tempImage: getImage(message: imageArray.later8DaysWeather!), tempMax: array.later8DaysMaxTemp, tempMin: array.later8DaysMinTemp, rain: imageArray.later8DaysRain)
-        let nineth = WeekWeatherEntity(afterHours: 216, tempImage: getImage(message: imageArray.later9DaysWeather!), tempMax: array.later9DaysMaxTemp, tempMin: array.later9DaysMinTemp, rain: imageArray.later9DaysRain)
-        let tenth = WeekWeatherEntity(afterHours: 240, tempImage: getImage(message: imageArray.later10DaysWeather!), tempMax: array.later10DaysMaxTemp, tempMin: array.later10DaysMinTemp, rain: imageArray.later10DaysRain)
+    func convertWeekWeather(temp: WeekWeatherTemp, weatherAndRain: WeekWeatherRainAndImage) {
+        let third = WeekWeatherEntity(afterHours: 72, tempImage: getImage(message: weatherAndRain.later3DaysWeather!), tempMax: temp.later3DaysMaxTemp, tempMin: temp.later3DaysMinTemp, rain: weatherAndRain.later3DaysRain)
+        let fourth = WeekWeatherEntity(afterHours: 96, tempImage: getImage(message: weatherAndRain.later4DaysWeather!), tempMax: temp.later4DaysMaxTemp, tempMin: temp.later4DaysMinTemp, rain: weatherAndRain.later4DaysRain)
+        let fifth = WeekWeatherEntity(afterHours: 120, tempImage: getImage(message: weatherAndRain.later5DaysWeather!), tempMax: temp.later5DaysMaxTemp, tempMin: temp.later5DaysMinTemp, rain: weatherAndRain.later5DaysRain)
+        let sixth = WeekWeatherEntity(afterHours: 144, tempImage: getImage(message: weatherAndRain.later6DaysWeather!), tempMax: temp.later6DaysMaxTemp, tempMin: temp.later6DaysMinTemp, rain: weatherAndRain.later6DaysRain)
+        let seventh = WeekWeatherEntity(afterHours: 168, tempImage: getImage(message: weatherAndRain.later7DaysWeather!), tempMax: temp.later7DaysMaxTemp, tempMin: temp.later7DaysMinTemp, rain: weatherAndRain.later7DaysRain)
+        let eighth = WeekWeatherEntity(afterHours: 192, tempImage: getImage(message: weatherAndRain.later8DaysWeather!), tempMax: temp.later8DaysMaxTemp, tempMin: temp.later8DaysMinTemp, rain: weatherAndRain.later8DaysRain)
+        let nineth = WeekWeatherEntity(afterHours: 216, tempImage: getImage(message: weatherAndRain.later9DaysWeather!), tempMax: temp.later9DaysMaxTemp, tempMin: temp.later9DaysMinTemp, rain: weatherAndRain.later9DaysRain)
+        let tenth = WeekWeatherEntity(afterHours: 240, tempImage: getImage(message: weatherAndRain.later10DaysWeather!), tempMax: temp.later10DaysMaxTemp, tempMin: temp.later10DaysMinTemp, rain: weatherAndRain.later10DaysRain)
 
         weekWeatherArray = [third, fourth, fifth, sixth, seventh, eighth, nineth, tenth]
     }
@@ -274,7 +274,7 @@ extension ThisWeekViewController: UITableViewDataSource {
               let tempImage = weekWeather.tempImage,
               let rain = weekWeather.rain else { return cell }
 
-        cell.dateLabel.text = dateFormatter(afterHours: afterHours)
+        cell.dateLabel.text = dateFormatterForWeek(afterHours: afterHours)
         cell.weatherImageView.image = tempImage
         cell.tempMinMaxLabel.text = "\(tempMax)°C / \(tempMin)°C"
         cell.rainLabel.text = "\(rain)%"
@@ -322,7 +322,7 @@ extension ThisWeekViewController: CLLocationManagerDelegate {
                     let regionCode = getRegionCode(city: city)
                     let imageRegionCode = getImageRegionCode(city: city)
 
-                    self.start(regionCode: regionCode, imageRegionCode: imageRegionCode)
+                    self.fetchWeekWeatherDataWith(regionCode: regionCode, imageRegionCode: imageRegionCode)
                 } else {
                     print("도시 이름을 찾을 수 없음")
                 }
