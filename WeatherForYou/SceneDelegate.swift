@@ -32,13 +32,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)]
         let colorAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.foregroundColor: UIColor.white]
 
-        guard let items = tabBarVC.tabBar.items else { return }
-        items[0].setTitleTextAttributes(attributes, for: .normal)
-        items[0].setTitleTextAttributes(colorAttributes, for: .selected)
-        items[1].setTitleTextAttributes(attributes, for: .normal)
-        items[1].setTitleTextAttributes(colorAttributes, for: .selected)
-        items[2].setTitleTextAttributes(attributes, for: .normal)
-        items[2].setTitleTextAttributes(colorAttributes, for: .selected)
+        tabBarVC.tabBar.items?.forEach { item in
+            item.setTitleTextAttributes(attributes, for: .normal)
+            item.setTitleTextAttributes(colorAttributes, for: .selected)
+        }
 
         window?.rootViewController = tabBarVC
         window?.makeKeyAndVisible()
