@@ -59,7 +59,7 @@ struct WeekWeatherTemp: Codable {
         case later8DaysMinTemp = "taMin8"
         case later8DaysMaxTemp = "taMax8"
         case later9DaysMinTemp = "taMin9"
-        case later9DaysMaxTemp = "taMaX9"
+        case later9DaysMaxTemp = "taMax9"
         case later10DaysMinTemp = "taMin10"
         case later10DaysMaxTemp = "taMax10"
     }
