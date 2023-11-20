@@ -1,5 +1,5 @@
 //
-//  Forecast.swift
+//  Forecast3Days.swift
 //  WeatherForYou
 //
 //  Created by Bora Yang on 11/6/23.
@@ -7,8 +7,7 @@
 
 import Foundation
 
-
-struct Forecast: Codable {
+struct Forecast3Days: Codable {
     let weatherInfoList: [WeatherInfo]?
 
     enum CodingKeys: String, CodingKey {

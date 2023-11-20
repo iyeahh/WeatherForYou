@@ -22,7 +22,7 @@ final class NetworkManager {
         performRequest(request: request, completion: completion)
     }
 
-    func fetch3DaysForecast(lat: String, lon: String, completion: @escaping (Result<Forecast, NetworkError>) -> Void) {
+    func fetch3DaysForecast(lat: String, lon: String, completion: @escaping (Result<Forecast3Days, NetworkError>) -> Void) {
 
         guard let url = makeURL(path: NetworkConfig.URLPath.forecast.rawValue, lat: lat, lon: lon) else { return }
         var request = URLRequest(url: url)
@@ -40,7 +40,7 @@ final class NetworkManager {
         performRequest(request: request, completion: completion)
     }
 
-    func fetchWeekWeatherImageAndRain(location: String, date: String, completion: @escaping (Result<WeekWeatherImage, NetworkError>) -> Void) {
+    func fetchWeekWeatherRainAndImage(location: String, date: String, completion: @escaping (Result<WeekWeatherRainAndImage, NetworkError>) -> Void) {
         guard let url = makeURL(path: NetworkConfig.URLPath.weekWeatherImage.rawValue, location: location, date: date) else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"

@@ -10,30 +10,38 @@ import UIKit
 class WeekWeatherTableViewCell: UITableViewCell {
     static let identifier = "WeekWeatherTableViewCell"
 
-    let dateLabel: UILabel = {
+    lazy var dateLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(label)
         return label
     }()
 
-    let weatherImageView: UIImageView = {
+    lazy var weatherImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(imageView)
         return imageView
     }()
 
-    let tempMinMaxLabel: UILabel = {
+    lazy var tempMinMaxLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(label)
         return label
     }()
 
-    let rainLabel: UILabel = {
+    lazy var rainLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.textAlignment = .right
         label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(label)
         return label
     }()
 
@@ -46,17 +54,7 @@ class WeekWeatherTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupLayout() {
-        contentView.addSubview(dateLabel)
-        contentView.addSubview(weatherImageView)
-        contentView.addSubview(tempMinMaxLabel)
-        contentView.addSubview(rainLabel)
-
-        dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        weatherImageView.translatesAutoresizingMaskIntoConstraints = false
-        tempMinMaxLabel.translatesAutoresizingMaskIntoConstraints = false
-        rainLabel.translatesAutoresizingMaskIntoConstraints = false
-
+    private func setupLayout() {
         NSLayoutConstraint.activate([
             dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             dateLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.25),

@@ -1,5 +1,5 @@
 //
-//  WeekWeatherImage.swift
+//  WeekWeatherRainAndImage.swift
 //  WeatherForYou
 //
 //  Created by Bora Yang on 11/14/23.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WeekWeatherImage: Codable {
+struct WeekWeatherRainAndImage: Codable {
     let response: ImageResponse?
 }
 
@@ -28,14 +28,14 @@ struct WeekWeatherImageResponse: Codable {
 }
 
 struct WeekWeatherImageItems: Codable {
-    let weekWeatherRainAndImageList: [WeekWeatherRainAndImage]?
+    let weekWeatherRainAndImageList: [WeekWeatherRainAndImageData]?
 
     enum CodingKeys: String, CodingKey {
         case weekWeatherRainAndImageList = "item"
     }
 }
 
-struct WeekWeatherRainAndImage: Codable {
+struct WeekWeatherRainAndImageData: Codable {
     let later3DaysRain, later4DaysRain: Int?
     let later5DaysRain, later6DaysRain: Int?
     let later7DaysRain, later8DaysRain: Int?

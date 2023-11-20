@@ -10,22 +10,28 @@ import UIKit
 class TomorrowCollectionViewCell: UICollectionViewCell {
     static let identifier = "TomorrowCollectionViewCell"
 
-    let timeLabel: UILabel = {
+    lazy var timeLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 10)
         label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(label)
         return label
     }()
 
-    let weatherImageView: UIImageView = {
+    lazy var weatherImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(imageView)
         return imageView
     }()
 
-    let temperatureLabel: UILabel = {
+    lazy var temperatureLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 10)
         label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(label)
         return label
     }()
 
@@ -38,15 +44,7 @@ class TomorrowCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setupLayout() {
-        contentView.addSubview(timeLabel)
-        contentView.addSubview(weatherImageView)
-        contentView.addSubview(temperatureLabel)
-
-        timeLabel.translatesAutoresizingMaskIntoConstraints = false
-        weatherImageView.translatesAutoresizingMaskIntoConstraints = false
-        temperatureLabel.translatesAutoresizingMaskIntoConstraints = false
-
+    private func setupLayout() {
         NSLayoutConstraint.activate([
             timeLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             timeLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
