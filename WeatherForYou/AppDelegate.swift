@@ -11,7 +11,15 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        WeatherDataManager.shared.setupCoreLocation()
+        WeatherDataManager.shared.setupCoreLocation {
+            DispatchQueue.main.async {
+                if let windowScene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
+                    if let window = windowScene.windows.first {
+                        window.rootViewController = TodayViewController()
+                    }
+                }
+            }
+        }
         return true
     }
 

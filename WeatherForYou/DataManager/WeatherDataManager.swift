@@ -57,10 +57,12 @@ final class WeatherDataManager: NSObject {
         super.init()
     }
 
-    func setupCoreLocation() {
+    func setupCoreLocation(completion: @escaping () -> Void) {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
+
+        completion()
     }
 
     func fetchWeatherDataWith(lat: String, lon: String) {

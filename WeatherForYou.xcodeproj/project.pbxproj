@@ -94,6 +94,7 @@
 				76DC7D662AF2345300F566B8 /* Helpers */,
 				76DC7D692AF2350700F566B8 /* Networking */,
 				76DC7D6C2AF23EEB00F566B8 /* Models */,
+				76C4393B2B0B27B600238FF0 /* DataManager */,
 				76917C782B038F7300A4BEA0 /* Today */,
 				76917C792B038F7F00A4BEA0 /* Tomorrow */,
 				76917C7A2B038F8600A4BEA0 /* ThisWeek */,
@@ -191,6 +192,15 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
+		76C4393B2B0B27B600238FF0 /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				76EE73382B0A1BF7008C8995 /* WeatherDataManager.swift */,
+				76EE733A2B0A1D60008C8995 /* WeatherDataManager+.swift */,
+			);
+			path = DataManager;
+			sourceTree = "<group>";
+		};
 		76DC7D662AF2345300F566B8 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -217,8 +227,6 @@
 				76917C712B0330C400A4BEA0 /* WeekWeatherRainAndImage.swift */,
 				76306EAE2B022A2C00AED402 /* WeekWeatherEntity.swift */,
 				76EE733C2B0A1DC8008C8995 /* MainWeather.swift */,
-				76EE73382B0A1BF7008C8995 /* WeatherDataManager.swift */,
-				76EE733A2B0A1D60008C8995 /* WeatherDataManager+.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
