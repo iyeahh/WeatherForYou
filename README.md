@@ -1,4 +1,4 @@
-# 🗓 WeatherForYou README
+# 🗓 웨더포유 (WeatherForYou) README
 
 ##### 2023년 11월 1일 → 2023년 11월 20일
 
@@ -7,6 +7,7 @@
 
 ## 🤓 기술스택
 * UIKit
+* UI -> Code
 * CLLocation, CLGeocoder
 * URLSession
 * UICollecionView
