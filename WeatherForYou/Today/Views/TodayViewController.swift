@@ -10,7 +10,8 @@ import CoreLocation
 
 class TodayViewController: UIViewController {
 
-    let weatherDataManager = WeatherDataManager.shared
+    let viewModel = TodayViewModel()
+
     let screenHeight: CGFloat = UIScreen.main.bounds.height
 
     lazy var dateLabel: UILabel = {
@@ -66,17 +67,13 @@ class TodayViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNotification()
         setupLayout()
         setupCollectionView()
         registerCollecionViewCell()
         configureUI()
-    }
-
-    private func setupNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(configureUI), name: .cityName, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(configureUI), name: .mainWeather, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(configureUI), name: .todayWeatherList, object: nil)
+        viewModel.onDataUpdated = { [weak self] in
+            self?.configureUI()
+        }
     }
 
     private func setupLayout() {
@@ -128,56 +125,41 @@ class TodayViewController: UIViewController {
 
     @objc func configureUI () {
         DispatchQueue.main.async {
-            guard let weather = self.weatherDataManager.mainWeater else { return }
-            self.dateLabel.textColor = weather.textColor
-            self.locationLabel.textColor = weather.textColor
-            self.tempRangeLabel.textColor = weather.textColor
-            self.temperatureLabel.textColor = weather.textColor
+            guard self.viewModel.validWeatherData() else { return }
 
-            self.locationLabel.text = self.weatherDataManager.cityName
+            self.dateLabel.textColor = self.viewModel.textColor
+            self.locationLabel.textColor = self.viewModel.textColor
+            self.tempRangeLabel.textColor = self.viewModel.textColor
+            self.temperatureLabel.textColor = self.viewModel.textColor
 
-            self.dateLabel.text = weather.dateString
-            self.tempRangeLabel.text = "체감온도: \(Int(weather.feelsLikeTemp ?? 0.0))°C"
-            self.temperatureLabel.text = "\(Int(weather.currentTemp ?? 0.0))°C"
-            self.weatherImageView.image = weather.weatherImage
+            self.locationLabel.text = self.viewModel.cityName
 
-            let (color1, color2) = weather.backgrounColor ?? (UIColor.weatherTheme.base.0, UIColor.weatherTheme.base.1)
+            self.dateLabel.text = self.viewModel.dateString
+            self.tempRangeLabel.text = self.viewModel.feelsLikeTemp
+            self.temperatureLabel.text = self.viewModel.currentTemp
+            self.weatherImageView.image = self.viewModel.weatherImage
+
+            let (color1, color2) = self.viewModel.backgroundColor 
             self.setBackground(color1: color1, color2: color2)
+
             self.todayCollectionView.reloadData()
         }
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
 }
 
 extension TodayViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return weatherDataManager.todayWeatherList.count
+        return viewModel.todayWeatherListCount
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TodayCollectionViewCell.identifier, for: indexPath) as! TodayCollectionViewCell
 
-        cell.temperatureLabel.textColor = weatherDataManager.mainWeater?.textColor
-            cell.timeLabel.textColor = weatherDataManager.mainWeater?.textColor
-
-
-        if let date = weatherDataManager.todayWeatherList[indexPath.row].dateText {
-            cell.timeLabel.text = Date.dateToHours(date: date)
-        }
-
-        if let temp = weatherDataManager.todayWeatherList[indexPath.row].tempInfo?.temp {
-            let roundedTemp = round(temp)
-            cell.temperatureLabel.text = "\(Int(roundedTemp))°C"
-        }
-
-        if let textColor = weatherDataManager.mainWeater?.textColor {
-            if let icon = weatherDataManager.todayWeatherList[indexPath.row].weather?.first?.icon {
-                cell.weatherImageView.image = weatherDataManager.setImage(iconString: icon)?.withTintColor(textColor)
-            }
-        }
+        cell.temperatureLabel.textColor = viewModel.textColor
+        cell.timeLabel.textColor = viewModel.textColor
+        cell.timeLabel.text = viewModel.getTimeString(index: indexPath.row)
+        cell.temperatureLabel.text = viewModel.getTempString(index: indexPath.row)
+        cell.weatherImageView.image = viewModel.getIconImageWithColor(index: indexPath.row)
 
         return cell
     }

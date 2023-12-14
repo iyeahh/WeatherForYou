@@ -14,5 +14,5 @@ struct MainWeater {
     let currentTemp: Double?
 
     let textColor: UIColor?
-    let backgrounColor: (UIColor, UIColor)?
+    let backgroundColor: (UIColor, UIColor)?
 }

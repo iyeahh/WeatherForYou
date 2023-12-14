@@ -84,7 +84,7 @@ final class WeatherDataManager: NSObject {
                     textColor = .darkGray
                 }
 
-                self.mainWeater = MainWeater(dateString: Date.currentDateToString(), feelsLikeTemp: roundedFeelsLikeTemp, weatherImage: iconImage.makeShadow(), currentTemp: roundedTemp, textColor: textColor, backgrounColor: color)
+                self.mainWeater = MainWeater(dateString: Date.currentDateToString(), feelsLikeTemp: roundedFeelsLikeTemp, weatherImage: iconImage.makeShadow(), currentTemp: roundedTemp, textColor: textColor, backgroundColor: color)
 
             case .failure(let error):
                 print(error.localizedDescription)

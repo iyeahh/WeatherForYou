@@ -10,7 +10,7 @@ import CoreLocation
 
 class ThisWeekViewController: UIViewController {
 
-    let weatherDataManager = WeatherDataManager.shared
+    let viewModel = ThisWeekViewModel()
 
     lazy var locationLabel: UILabel = {
         let label = UILabel()
@@ -31,16 +31,13 @@ class ThisWeekViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNotification()
         setupLayout()
         setupTableView()
         registerTableView()
         configureUI()
-        setBackground(color1: UIColor.weatherTheme.base.1, color2: UIColor.weatherTheme.base.0)
-    }
-
-    private func setupNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(configureUI), name: .weekWeatherList, object: nil)
+        viewModel.onDataUpdated = { [weak self] in
+            self?.configureUI()
+        }
     }
 
     private func setupLayout() {
@@ -68,8 +65,9 @@ class ThisWeekViewController: UIViewController {
 
     @objc func configureUI() {
         DispatchQueue.main.async {
-            self.locationLabel.text = self.weatherDataManager.cityName
+            self.locationLabel.text = self.viewModel.cityName
             self.thisWeekTableView.reloadData()
+            self.setBackground(color1: UIColor.weatherTheme.base.1, color2: UIColor.weatherTheme.base.0)
         }
     }
 
@@ -87,24 +85,16 @@ class ThisWeekViewController: UIViewController {
 
 extension ThisWeekViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return weatherDataManager.weekWeatherArray.count
+        return viewModel.weekWeatherListCount
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: WeekWeatherTableViewCell.identifier, for: indexPath) as! WeekWeatherTableViewCell
 
-        let weekWeather = weatherDataManager.weekWeatherArray[indexPath.row]
-
-        guard let tempMax = weekWeather.tempMax,
-              let tempMin = weekWeather.tempMin,
-              let afterHours = weekWeather.afterHours,
-              let tempImage = weekWeather.tempImage,
-              let rain = weekWeather.rain else { return cell }
-
-        cell.dateLabel.text = Date.dateFormatterForWeek(afterHours: afterHours)
-        cell.weatherImageView.image = tempImage
-        cell.tempMinMaxLabel.text = "\(tempMax)°C / \(tempMin)°C"
-        cell.rainLabel.text = "\(rain)%"
+        cell.dateLabel.text = viewModel.getDateString(index: indexPath.row)
+        cell.weatherImageView.image = viewModel.getTempImage(index: indexPath.row)
+        cell.tempMinMaxLabel.text = viewModel.getTempString(index: indexPath.row)
+        cell.rainLabel.text = viewModel.getRainString(index: indexPath.row)
 
         cell.backgroundColor = .clear
         cell.selectionStyle = .none

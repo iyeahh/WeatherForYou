@@ -10,7 +10,8 @@ import CoreLocation
 
 class TomorrowViewController: UIViewController {
 
-    let weatherDataManager = WeatherDataManager.shared
+    let viewModel = TomorrowViewModel()
+
     let screenHeight: CGFloat = UIScreen.main.bounds.height
 
     lazy var locationLabel: UILabel = {
@@ -66,18 +67,13 @@ class TomorrowViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNotification()
         setupLayout()
         setupCollectionView()
         registerCollecionViewCell()
         configureUI()
-        setBackground(color1: UIColor.weatherTheme.base.0, color2: UIColor.weatherTheme.base.1)
-    }
-
-    private func setupNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(configureUI), name: .cityName, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .tomorrowWeatherList, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .dayAfterTomorrowWeatherList, object: nil)
+        viewModel.onDataUpdated = { [weak self] in
+            self?.configureUI()
+        }
     }
 
     private func setupLayout() {
@@ -104,7 +100,7 @@ class TomorrowViewController: UIViewController {
             dayAfterTomorrowCollectionView.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
-    
+
     private func setupCollectionView() {
         tomorrowCollectionView.dataSource = self
         tomorrowCollectionView.delegate = self
@@ -122,10 +118,12 @@ class TomorrowViewController: UIViewController {
 
     @objc func configureUI() {
         DispatchQueue.main.async {
-            self.locationLabel.text = self.weatherDataManager.cityName
+            self.locationLabel.text = self.viewModel.cityName
 
-            self.tomorrowDateLabel.text = Date.tomorrowAndNextDayToString().0
-            self.dayAfterTomorrowDateLabel.text = Date.tomorrowAndNextDayToString().1
+            self.tomorrowDateLabel.text = self.viewModel.tomorrowDateString
+            self.dayAfterTomorrowDateLabel.text = self.viewModel.dayAfterTomorrowDateString
+
+            self.setBackground(color1: UIColor.weatherTheme.base.0, color2: UIColor.weatherTheme.base.1)
         }
     }
 
@@ -135,7 +133,6 @@ class TomorrowViewController: UIViewController {
             self.dayAfterTomorrowCollectionView.reloadData()
         }
     }
-
     private func setBackground(color1: UIColor, color2: UIColor) {
         let gradientLayer = CAGradientLayer()
 
@@ -146,18 +143,14 @@ class TomorrowViewController: UIViewController {
 
         self.view.layer.insertSublayer(gradientLayer, at: 0)
     }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
 }
 
 extension TomorrowViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == tomorrowCollectionView {
-            return weatherDataManager.tomorrowWeatherList.count
+            return viewModel.tomorrowWeatherListCount
         } else if collectionView == dayAfterTomorrowCollectionView {
-            return weatherDataManager.dayAfterTomorrowWeatherList.count
+            return viewModel.dayAfterTomorrowWeatherListCount
         }
         return 0
     }
@@ -167,36 +160,18 @@ extension TomorrowViewController: UICollectionViewDataSource {
         if collectionView == tomorrowCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TomorrowCollectionViewCell.identifier, for: indexPath) as! TomorrowCollectionViewCell
 
-            if let date = weatherDataManager.tomorrowWeatherList[indexPath.row].dateText {
-                cell.timeLabel.text = Date.dateToHours(date: date)
-            }
-
-            if let temp = weatherDataManager.tomorrowWeatherList[indexPath.row].tempInfo?.temp {
-                let roundedTemp = round(temp)
-                cell.temperatureLabel.text = "\(Int(roundedTemp))°C"
-            }
-
-            if let icon = weatherDataManager.tomorrowWeatherList[indexPath.row].weather?.first?.icon {
-                cell.weatherImageView.image = weatherDataManager.setImage(iconString: icon)
-            }
+            cell.timeLabel.text = viewModel.getTimeString(index: indexPath.row)
+            cell.temperatureLabel.text = viewModel.getTempString(index: indexPath.row)
+            cell.weatherImageView.image = viewModel.getIconImageWithColor(index: indexPath.row)
 
             return cell
 
         } else if collectionView == dayAfterTomorrowCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayAfterTomorrowCollectionViewCell.identifier, for: indexPath) as! DayAfterTomorrowCollectionViewCell
 
-            if let date = weatherDataManager.dayAfterTomorrowWeatherList[indexPath.row].dateText {
-                cell.timeLabel.text = Date.dateToHours(date: date)
-            }
-
-            if let temp = weatherDataManager.dayAfterTomorrowWeatherList[indexPath.row].tempInfo?.temp {
-                let roundedTemp = round(temp)
-                cell.temperatureLabel.text = "\(Int(roundedTemp))°C"
-            }
-
-            if let icon = weatherDataManager.dayAfterTomorrowWeatherList[indexPath.row].weather?.first?.icon {
-                cell.weatherImageView.image = weatherDataManager.setImage(iconString: icon)
-            }
+            cell.timeLabel.text = viewModel.getDayAfterTomorrowTimeString(index: indexPath.row)
+            cell.temperatureLabel.text = viewModel.getDayAfterTomorrowTimeString(index: indexPath.row)
+            cell.weatherImageView.image = viewModel.getDayAfterTomorrowIconImageWithColor(index: indexPath.row)
 
             return cell
         }
