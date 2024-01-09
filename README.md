@@ -7,7 +7,7 @@
 
 ## 🤓 기술스택
 * UIKit
-* UI -> Code
+* UI - Code
 * CLLocation, CLGeocoder
 * URLSession
 * MVC → MVVM 리팩토링
@@ -18,6 +18,7 @@
 **반복되는 API호출을 줄여, 간단한 코드로 줄일 수 없을까? (제네릭 문법 활용)**
 
 ### ❕ 해결 방법
+
 
 💡 **문제상황**: **API 4개를 사용하고 있는 네트워킹 함수가 있지만, 반복되는 요소들이 눈에 띔. 어떻게 반복되는 코드를 줄일 수 있을까?**
 
@@ -36,8 +37,6 @@
     // URLSession.shared.dataTask(with: request) 하는 함수
     func performRequest<T: Decodable>(request: URLRequest, completion: @escaping (Result<T, NetworkError>) -> Void)
     ```
-    
-
 
 ---
        
@@ -90,14 +89,27 @@
     }
     ```
     
-
-    
 ---
 ### ❓ 문제
-**반복되는 네트워킹 호출 줄이기, 비동기적인 데이터 호출 후에 데이터 생성 시점 파악하기 (데이터 관리 Layer추가와 노티피케이션을 활용한 데이터 바인딩)**
+**데이터 관리 계층(Layer)과 MVVM 아키텍처로 리팩토링 (향후 유지보수를 고려한 설계로 리팩토링)**
 
 ### ❕ 해결 방법
 
+💡 **문제 상황**: **MVC구조에서, 3개의 탭이 존재하고 각 뷰컨트롤러(뷰)에 진입시마다 불필요한 네트워킹 데이터요청이 지속적으로 일어남. 
+                 불필요한 반복적인 네트워크 요청을 어떻게 줄일 수 있을까? 또한 (날씨) 데이터 관리를 보다 효율적으로 할 수 없을까?**
+
+- **MVC** **기존구조** - 각 탭에서 불필요하게 반복적으로 네트워크 요청 및 효율적이지 않은 (날씨) 데이터 관리
+- **MVVM + 데이터 관리 계층 추가** (불필요한 반복적인 네트워크 요청을 줄이고, 효율적으로 데이터를 관리)
+- 데이터 관리 계층 추가와 MVVM의 뷰모델 추가로 인해 비대한 뷰컨트롤러에서 벗어나 보다 효율적인 프로젝트 관리로 유지 가능해졌음
+
+<img width="500" alt="스크린샷 2024-01-10 오후 1 51 58" src="https://github.com/iyeahh/WeatherForYou/assets/120009678/386c0442-80f4-4651-8793-be7774458ca8">
+<img width="500" alt="스크린샷 2024-01-10 오후 1 52 04" src="https://github.com/iyeahh/WeatherForYou/assets/120009678/ce6f02e5-405c-4fdd-94d4-ffcc04325b67">
+
+---
+### ❓ 문제
+**반복되는 네트워킹 호출 줄이기, 비동기적인 데이터 호출 후에 데이터 생성 시점 파악하기 (데이터 관리 Layer 추가와 노티피케이션을 활용한 데이터 바인딩)**
+
+### ❕ 해결 방법
 💡 **문제상황:** **각 탭마다 네트워킹 함수와 CoreLocation을 호출하여 켜지는데 시간이 소요되고, 반복되는 네트워킹 함수 호출이 많음**
  **→ 어떻게 하면 유저의 더 나은 경험이 되도록 하고, 반복되는 네트워킹 함수 호출을 줄일 수 있을까?**
 
@@ -106,7 +118,7 @@
     - 데이터 관리 객체 Layer에서 데이터 생성 시점을 노티피케이션을 활용해, 시점을 전달 했음 (노티피케이션을 활용한 데이터 바인딩)
     
     ```swift
-    // 변수마다 노티피케이션을 부여해 값이 변경되면 뷰를 유동적으로 그리도록 함
+    // 변수마다 노티피케이션을 부여해, 데이터 변경시점에 노티피케이션을 통해 알리고, 유동적으로 뷰를 다시 그리도록 함
     extension Notification.Name {
         static let cityName = Notification.Name("cityName")
         static let mainWeather = Notification.Name("mainWeather")
@@ -117,23 +129,21 @@
     }
     
     private func setupNotification() {
-            NotificationCenter.default.addObserver(self, selector: #selector(configureUI), name: .cityName, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(configureUI), name: .mainWeather, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(configureUI), name: .todayWeatherList, object: nil)
-        }
+        NotificationCenter.default.addObserver(self, selector: #selector(configureUI), name: .cityName, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(configureUI), name: .mainWeather, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(configureUI), name: .todayWeatherList, object: nil)
+    }
     
     deinit {
-            NotificationCenter.default.removeObserver(self)
-        }
+        NotificationCenter.default.removeObserver(self)
+    }
     ```
     
-
 ---
 ### ❓ 문제
 **정확한 위치기반이나 기준이 없는 날씨 API를 이용해야하는 문제점 (기상청 API 예보구역코드 매칭 문제)**
 
 ### ❕ 해결 방법
-
 💡 **문제상황:** **기상청 API를 호출할 때 필수로 예보구역코드가 필요한데 201개로 나누어진 코드를 어떻게 적용시켜야 할까?**
 
 - 예보구역코드는 대한민국을 (특별한 기준이 없이 임의로) 201개의 도시로 나누어 놓음 (이에 대해 나누는 정확한 기준이 나와있지 않아)
@@ -199,13 +209,12 @@
             }
     }
     ```
-    
 ---
 ### ❓ 문제
 **런치스크린 시점 조절을 통한 자연스러운 UX구현 (앱 런칭시 네트워킹을 시작하고, 데이터 생성시점에 런치스크린 종료 구현)**
 
 ### ❕ 해결 방법
-💡 **문제상황:** **앱 런칭시, 필수적으로 날씨 데이터를 가져오기 위한 네트워킹이 진행되고,  네트워킹 동안 유저가 (하얀색 화면이 아닌) 런치스크린을 보다가, 
+💡 **문제상황:** **앱 런칭 시 필수적으로 날씨 데이터를 가져오기 위한 네트워킹이 진행되고, 네트워킹 동안 유저가 (하얀색 화면이 아닌) 런치스크린을 보다가
                 자연스럽게 “데이터 생성시점”에 앱의 첫번째 화면으로 넘어가려면 어떻게 구현해야 할까?**
 
 - 네트워킹이 끝나는 시점에 rootViewController를 첫 탭으로 할당해 런치스크린 종료 시점을 파악하여 이동시키도록 구현
@@ -213,11 +222,11 @@
     ```swift
     // 선언부
     func setupCoreLocation(completion: @escaping () -> Void) {
-            locationManager.delegate = self
-            locationManager.requestWhenInUseAuthorization()
-            locationManager.startUpdatingLocation()
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
     
-            completion()
+        completion()
     }
     ```
     
